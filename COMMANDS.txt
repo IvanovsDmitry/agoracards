@@ -1,0 +1,11 @@
+# Команды для загрузки файлов в GitHub
+
+cd "/Users/dmitryivanov/Desktop/ConversationCards-Web"
+
+git push -u origin main
+
+# Если попросит логин/пароль:
+# - Username: IvanovsDmitry
+# - Password: используйте Personal Access Token (не обычный пароль!)
+#   Получить токен: https://github.com/settings/tokens
+

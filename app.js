@@ -141,6 +141,16 @@ function updateCardViewer() {
     document.getElementById('main-question').textContent = card.mainQuestion;
     document.getElementById('additional-question').textContent = card.additionalQuestion;
     
+    // Отобразить блок "или то, или то", если есть
+    const alternativesBlock = document.getElementById('alternatives-block');
+    const alternativesText = document.getElementById('alternatives-text');
+    if (card.alternatives) {
+        alternativesText.textContent = card.alternatives;
+        alternativesBlock.style.display = 'block';
+    } else {
+        alternativesBlock.style.display = 'none';
+    }
+    
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
@@ -221,28 +231,58 @@ function updateFlipButton() {
 // Настройка свайпов
 function setupSwipeHandlers() {
     const cardContainer = document.getElementById('card-container');
+    const flipCardElement = document.getElementById('flip-card');
     let startX = 0;
+    let startY = 0;
     let currentX = 0;
+    let currentY = 0;
     let isDragging = false;
+    let hasMoved = false;
     
+    // Обработка клика на карту для переворота (только клик, не свайп)
+    flipCardElement.addEventListener('click', (e) => {
+        // Если был свайп, не переворачиваем
+        if (hasMoved) {
+            hasMoved = false;
+            return;
+        }
+        flipCard();
+    });
+    
+    // Свайпы для переключения карт
     cardContainer.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
         isDragging = true;
+        hasMoved = false;
+        e.preventDefault();
     });
     
     cardContainer.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         currentX = e.touches[0].clientX;
+        currentY = e.touches[0].clientY;
+        
+        const diffX = Math.abs(currentX - startX);
+        const diffY = Math.abs(currentY - startY);
+        
+        // Если движение больше по горизонтали - это свайп
+        if (diffX > 10 || diffY > 10) {
+            hasMoved = true;
+        }
     });
     
-    cardContainer.addEventListener('touchend', () => {
+    cardContainer.addEventListener('touchend', (e) => {
         if (!isDragging) return;
         isDragging = false;
         
         const diff = currentX - startX;
         const threshold = 50;
         
-        if (Math.abs(diff) > threshold) {
+        // Только если был свайп (не просто клик)
+        if (hasMoved && Math.abs(diff) > threshold) {
+            e.preventDefault();
+            e.stopPropagation();
             if (diff > 0) {
                 showPreviousCard();
             } else {
@@ -252,11 +292,46 @@ function setupSwipeHandlers() {
         
         startX = 0;
         currentX = 0;
+        startY = 0;
+        currentY = 0;
+        hasMoved = false;
     });
     
-    // Обработка клика на карту для переворота
-    const flipCardElement = document.getElementById('flip-card');
-    flipCardElement.addEventListener('click', flipCard);
+    // Также добавим поддержку мыши для свайпов (для тестирования на десктопе)
+    cardContainer.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = true;
+        hasMoved = false;
+    });
+    
+    cardContainer.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX;
+        currentY = e.clientY;
+        const diffX = Math.abs(currentX - startX);
+        if (diffX > 10) hasMoved = true;
+    });
+    
+    cardContainer.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diff = currentX - startX;
+        const threshold = 50;
+        
+        if (hasMoved && Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                showPreviousCard();
+            } else {
+                showNextCard();
+            }
+        }
+        
+        startX = 0;
+        currentX = 0;
+        hasMoved = false;
+    });
 }
 
 // Запуск приложения при загрузке

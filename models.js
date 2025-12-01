@@ -1,10 +1,11 @@
 // Модели данных - аналоги Swift структурам
 
 class Card {
-    constructor(id = null, mainQuestion, additionalQuestion) {
+    constructor(id = null, mainQuestion, additionalQuestion, alternatives = null) {
         this.id = id || this.generateId();
         this.mainQuestion = mainQuestion;
         this.additionalQuestion = additionalQuestion;
+        this.alternatives = alternatives; // Блок "или то, или то"
     }
     
     generateId() {
@@ -12,15 +13,24 @@ class Card {
     }
     
     toJSON() {
-        return {
+        const result = {
             id: this.id,
             mainQuestion: this.mainQuestion,
             additionalQuestion: this.additionalQuestion
         };
+        if (this.alternatives) {
+            result.alternatives = this.alternatives;
+        }
+        return result;
     }
     
     static fromJSON(json) {
-        return new Card(json.id, json.mainQuestion, json.additionalQuestion);
+        return new Card(
+            json.id, 
+            json.mainQuestion, 
+            json.additionalQuestion,
+            json.alternatives || null
+        );
     }
 }
 
