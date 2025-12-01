@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1A1A2E">
+    <title>АГОРА — Разговорные карты</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Главный экран: Список колод -->
+    <div id="deck-list-screen" class="screen active">
+        <div class="header-container">
+            <div class="logo">
+                🏛️
+            </div>
+            <h1 class="app-title">АГОРА</h1>
+            <p class="subtitle">Добро пожаловать в Агору</p>
+            <p class="description">Место, где люди становятся собеседниками</p>
+        </div>
+        
+        <div class="decks-grid" id="decks-grid">
+            <!-- Колоды будут добавлены через JavaScript -->
+        </div>
+        
+        <div class="footer">
+            <p class="footer-text">АГОРА — где каждый вопрос становится мостом</p>
+            <p class="footer-quote">«Твоя история начинается здесь»</p>
+        </div>
+    </div>
+    
+    <!-- Экран просмотра карт -->
+    <div id="card-viewer-screen" class="screen">
+        <div class="card-viewer-header">
+            <button class="nav-button" id="back-button">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="header-text">
+                <h2 id="deck-name-header"></h2>
+                <p class="card-counter" id="card-counter">Карта 1 из 10</p>
+            </div>
+            <button class="nav-button" id="edit-button">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M10.5 3L15 7.5L5.25 17.25H1.5V13.5L10.5 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="card-container" id="card-container">
+            <div class="flip-card" id="flip-card">
+                <div class="flip-card-inner">
+                    <div class="card-front" id="card-front">
+                        <p class="card-text" id="main-question"></p>
+                    </div>
+                    <div class="card-back" id="card-back">
+                        <p class="card-text" id="additional-question"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-controls">
+            <button class="random-button" id="random-button">
+                ✨ Пусть судьба выберет
+            </button>
+            <div class="control-buttons">
+                <button class="arrow-button" id="prev-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="flip-button" id="flip-button">
+                    Погляди глубже
+                </button>
+                <button class="arrow-button" id="next-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Экран редактирования колоды -->
+    <div id="edit-deck-screen" class="screen modal">
+        <div class="modal-header">
+            <button class="close-button" id="close-edit-button">✕</button>
+            <h2 id="edit-deck-title">Редактировать колоду</h2>
+            <button class="save-button" id="save-deck-button">Сохранить</button>
+        </div>
+        <div class="modal-content" id="edit-deck-content">
+            <!-- Контент редактирования -->
+        </div>
+    </div>
+    
+    <script src="models.js"></script>
+    <script src="data.js"></script>
+    <script src="deck-manager.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
