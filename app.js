@@ -43,10 +43,11 @@ function initApp() {
     });
     
     // Обработчики карт
-    document.getElementById('random-button').addEventListener('click', showRandomCard);
+    // Поменяли местами функции: random-button теперь переворачивает, flip-button показывает случайную
+    document.getElementById('random-button').addEventListener('click', flipCard);
     document.getElementById('prev-button').addEventListener('click', showPreviousCard);
     document.getElementById('next-button').addEventListener('click', showNextCard);
-    document.getElementById('flip-button').addEventListener('click', flipCard);
+    document.getElementById('flip-button').addEventListener('click', showRandomCard);
     
     // Обработчик свайпов
     setupSwipeHandlers();
@@ -139,16 +140,66 @@ function updateCardViewer() {
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
     document.getElementById('main-question').textContent = card.mainQuestion;
-    document.getElementById('additional-question').textContent = card.additionalQuestion;
     
-    // Отобразить блок "или то, или то", если есть
+    // Специальная обработка для колоды "Вопросы вечности"
+    const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
-    const alternativesText = document.getElementById('alternatives-text');
-    if (card.alternatives) {
-        alternativesText.textContent = card.alternatives;
-        alternativesBlock.style.display = 'block';
-    } else {
+    
+    if (currentDeck.name === "Вопросы вечности") {
+        // Для колоды "Вопросы вечности" парсим подсказку и уточняющий вопрос
         alternativesBlock.style.display = 'none';
+        eternityHintBlock.style.display = 'none';
+        
+        if (card.additionalQuestion) {
+            // Формат: "Уточняющий вопрос\n\n💭 Подсказка: ...\n\n«Цитата»"
+            const text = card.additionalQuestion;
+            
+            // Ищем подсказку
+            const hintMatch = text.match(/💭 Подсказка:/);
+            if (hintMatch) {
+                const hintIndex = hintMatch.index;
+                // Всё после "💭 Подсказка:"
+                const afterHint = text.substring(hintIndex).replace(/💭 Подсказка:\s*/, '').trim();
+                
+                // Разделяем по двойным переносам строк
+                const parts = afterHint.split(/\n\n+/);
+                
+                // Последняя часть - это уточняющий вопрос
+                const clarifyingQuestion = parts[parts.length - 1].trim();
+                
+                // Всё до последней части - это подсказка с цитатой
+                const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
+                
+                // Убираем цитату из подсказки (между « и »)
+                const hintWithoutQuote = hintWithQuote.replace(/«[^»]*»\s*/g, '').trim();
+                
+                // Порядок отображения: подсказка (курсив) → пропуск → уточняющий вопрос (обычный)
+                document.getElementById('additional-question').textContent = ''; // Очищаем основной текст
+                document.getElementById('hint-text').textContent = hintWithoutQuote;
+                document.getElementById('clarifying-question').textContent = clarifyingQuestion;
+                eternityHintBlock.style.display = 'block';
+            } else {
+                // Если формат не найден, показываем как обычно
+                document.getElementById('additional-question').textContent = card.additionalQuestion;
+                eternityHintBlock.style.display = 'none';
+            }
+        } else {
+            document.getElementById('additional-question').textContent = '';
+            eternityHintBlock.style.display = 'none';
+        }
+    } else {
+        // Для остальных колод - обычная логика
+        eternityHintBlock.style.display = 'none';
+        document.getElementById('additional-question').textContent = card.additionalQuestion;
+        
+        // Отобразить блок "или то, или то", если есть
+        const alternativesText = document.getElementById('alternatives-text');
+        if (card.alternatives) {
+            alternativesText.textContent = card.alternatives;
+            alternativesBlock.style.display = 'block';
+        } else {
+            alternativesBlock.style.display = 'none';
+        }
     }
     
     // Обновить состояние кнопок
@@ -225,7 +276,8 @@ function flipCard() {
 // Обновить текст кнопки flip
 function updateFlipButton() {
     const button = document.getElementById('flip-button');
-    button.textContent = isCardFlipped ? 'Вернуться к началу' : 'Погляди глубже';
+    // Кнопка теперь показывает случайную карту, текст не меняется
+    button.textContent = '✨ Пусть судьба выберет';
 }
 
 // Настройка свайпов
