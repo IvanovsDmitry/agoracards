@@ -5,7 +5,15 @@ class DeckManager {
         this.decks = [];
         this.decksKey = 'saved_decks';
         this.builtInDecksVersionKey = 'built_in_decks_version';
-        this.currentBuiltInDecksVersion = 3;
+        this.currentBuiltInDecksVersion = 4; // Версия 4: переименования колод (Компания друзей → Компания людей, и т.д.)
+        
+        // Маппинг старых названий колод на новые
+        this.oldDeckNames = [
+            'Компания друзей 16+',
+            'Дети 5+',
+            'Для пар',
+            'Лучшие друзья'
+        ];
         
         this.loadDecks();
         if (this.decks.length === 0) {
@@ -84,25 +92,67 @@ class DeckManager {
             const builtInDecks = BuiltInDecks.allDecks;
             const userDecks = this.decks.filter(d => !d.isBuiltIn);
             
-            const updatedDecks = [...builtInDecks, ...userDecks];
+            // Маппинг старых названий на новые (для замены)
+            const oldToNewNames = {
+                'Компания друзей 16+': 'Компания людей',
+                'Дети 5+': 'Маленькие люди',
+                'Для пар': 'Узнать друг друга глубже',
+                'Лучшие друзья': 'Мой любимый собеседник'
+            };
+            
+            // Удаляем старые встроенные колоды (по старым и новым названиям)
+            const allOldNames = Object.keys(oldToNewNames);
+            const allNewNames = Object.values(oldToNewNames);
+            const allBuiltInNames = builtInDecks.map(d => d.name);
+            const namesToRemove = new Set([...allOldNames, ...allNewNames, ...allBuiltInNames]);
+            
+            // Фильтруем: оставляем только пользовательские колоды (не старые встроенные)
+            const filteredUserDecks = userDecks.filter(d => {
+                // Удаляем колоды со старыми названиями (даже если они пользовательские)
+                if (this.oldDeckNames.includes(d.name)) {
+                    return false;
+                }
+                return true; // Оставляем только настоящие пользовательские колоды
+            });
+            
+            // Составляем итоговый список: новые встроенные + пользовательские
+            const updatedDecks = [...builtInDecks, ...filteredUserDecks];
             this.decks = updatedDecks;
             this.saveDecks();
             localStorage.setItem(this.builtInDecksVersionKey, this.currentBuiltInDecksVersion.toString());
         } else {
-            // Проверяем, все ли встроенные колоды на месте
+            // Проверяем, все ли встроенные колоды на месте и удаляем старые
             const builtInDecks = BuiltInDecks.allDecks;
+            const requiredBuiltInNames = new Set(builtInDecks.map(d => d.name));
+            
+            // Фильтруем: удаляем старые встроенные колоды и колоды со старыми названиями
+            this.decks = this.decks.filter(d => {
+                // Удаляем колоды со старыми названиями (встроенные или пользовательские)
+                if (this.oldDeckNames.includes(d.name)) {
+                    return false;
+                }
+                
+                // Если это пользовательская колода - оставляем
+                if (!d.isBuiltIn) {
+                    return true;
+                }
+                
+                // Если это встроенная колода - оставляем только актуальные
+                return requiredBuiltInNames.has(d.name);
+            });
+            
+            // Добавляем недостающие актуальные встроенные колоды
             const existingBuiltInNames = new Set(
                 this.decks.filter(d => d.isBuiltIn).map(d => d.name)
             );
-            const requiredBuiltInNames = new Set(builtInDecks.map(d => d.name));
-            
             const missingNames = [...requiredBuiltInNames].filter(name => !existingBuiltInNames.has(name));
             const missingDecks = builtInDecks.filter(d => missingNames.includes(d.name));
             
             if (missingDecks.length > 0) {
                 this.decks.push(...missingDecks);
-                this.saveDecks();
             }
+            
+            this.saveDecks();
         }
     }
     
