@@ -53,10 +53,17 @@
             <div class="flip-card" id="flip-card">
                 <div class="flip-card-inner">
                     <div class="card-front" id="card-front">
-                        <p class="card-text" id="main-question"></p>
+                        <div class="card-background" id="card-front-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <p class="card-text" id="main-question"></p>
+                        </div>
                     </div>
                     <div class="card-back" id="card-back">
-                        <p class="card-text" id="additional-question"></p>
+                        <div class="card-background" id="card-back-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <p class="card-text" id="additional-question"></p>
                         <div class="quiz-answer" id="quiz-answer" style="display: none;">
                             <div class="quiz-label">Правильный ответ:</div>
                             <div class="quiz-text" id="quiz-text"></div>
@@ -68,6 +75,7 @@
                         <div id="eternity-hint-block" style="display: none;">
                             <p class="hint-text" id="hint-text"></p>
                             <p class="clarifying-question" id="clarifying-question"></p>
+                        </div>
                         </div>
                     </div>
                 </div>

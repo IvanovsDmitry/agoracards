@@ -247,11 +247,19 @@ function updateCardViewer() {
     updateCardColor();
 }
 
-// Обновить цвет карты
+// Обновить цвет карты и применить иллюстрации
 function updateCardColor() {
     const cardFront = document.querySelector('.card-front');
     const cardBack = document.querySelector('.card-back');
+    const cardFrontBg = document.getElementById('card-front-bg');
+    const cardBackBg = document.getElementById('card-back-bg');
     const flipCard = document.getElementById('flip-card');
+    
+    // Убираем все паттерны
+    if (flipCard) {
+        flipCard.classList.remove('deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+            'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5');
+    }
     
     if (currentDeck.name === "Атака титанов") {
         // Специальный дизайн для "Атака титанов"
@@ -266,8 +274,11 @@ function updateCardColor() {
         if (flipCard) {
             flipCard.classList.add('aot-card');
         }
+        // Скрываем фоновые иллюстрации для AOT (используется специальный стиль)
+        if (cardFrontBg) cardFrontBg.style.display = 'none';
+        if (cardBackBg) cardBackBg.style.display = 'none';
     } else {
-        // Обычный дизайн для остальных колод
+        // Обычный дизайн для остальных колод с иллюстрациями
         const colorHex = currentDeck.colorHex;
         if (cardFront) {
             cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
@@ -278,6 +289,33 @@ function updateCardColor() {
         }
         if (flipCard) {
             flipCard.classList.remove('aot-card');
+        }
+        
+        // Применяем уникальные паттерны иллюстраций в зависимости от колоды
+        const deckNames = ["Компания людей", "Маленькие люди", "Большая семья", 
+                          "Узнать друг друга глубже", "Мой любимый собеседник", "Вопросы вечности"];
+        const deckIndex = deckNames.indexOf(currentDeck.name);
+        const patternClass = `deck-illustration-pattern-${(deckIndex % 5) + 1}`;
+        
+        if (flipCard && deckIndex !== -1) {
+            flipCard.classList.add(patternClass);
+        }
+        
+        // Показываем фоновые иллюстрации
+        if (cardFrontBg) {
+            cardFrontBg.style.display = 'block';
+            // Применяем цвет колоды к паттерну
+            const r = parseInt(colorHex.slice(1, 3), 16);
+            const g = parseInt(colorHex.slice(3, 5), 16);
+            const b = parseInt(colorHex.slice(5, 7), 16);
+            cardFrontBg.style.filter = `hue-rotate(${deckIndex * 30}deg) saturate(1.2)`;
+        }
+        if (cardBackBg) {
+            cardBackBg.style.display = 'block';
+            const r = parseInt(colorHex.slice(1, 3), 16);
+            const g = parseInt(colorHex.slice(3, 5), 16);
+            const b = parseInt(colorHex.slice(5, 7), 16);
+            cardBackBg.style.filter = `hue-rotate(${deckIndex * 30}deg) saturate(1.2)`;
         }
     }
 }
