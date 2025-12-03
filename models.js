@@ -1,11 +1,13 @@
 // Модели данных - аналоги Swift структурам
 
 class Card {
-    constructor(id = null, mainQuestion, additionalQuestion, alternatives = null) {
+    constructor(id = null, mainQuestion, additionalQuestion, alternatives = null, isQuiz = false, correctAnswer = null) {
         this.id = id || this.generateId();
         this.mainQuestion = mainQuestion;
         this.additionalQuestion = additionalQuestion;
         this.alternatives = alternatives; // Блок "или то, или то"
+        this.isQuiz = isQuiz; // Флаг для квиз-режима
+        this.correctAnswer = correctAnswer; // Правильный ответ для квиза
     }
     
     generateId() {
@@ -21,6 +23,10 @@ class Card {
         if (this.alternatives) {
             result.alternatives = this.alternatives;
         }
+        if (this.isQuiz) {
+            result.isQuiz = this.isQuiz;
+            result.correctAnswer = this.correctAnswer;
+        }
         return result;
     }
     
@@ -29,7 +35,9 @@ class Card {
             json.id, 
             json.mainQuestion, 
             json.additionalQuestion,
-            json.alternatives || null
+            json.alternatives || null,
+            json.isQuiz || false,
+            json.correctAnswer || null
         );
     }
 }

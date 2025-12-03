@@ -161,40 +161,234 @@ body {
     margin-top: 8px;
 }
 
-/* Специальный дизайн для колоды "Атака титанов" */
+/* Специальный аниме-дизайн для колоды "Атака титанов" */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
 .aot-deck {
-    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(40, 40, 40, 0.9), rgba(139, 0, 0, 0.3)) !important;
-    border: 2px solid rgba(139, 0, 0, 0.6) !important;
-    box-shadow: 0 8px 16px rgba(139, 0, 0, 0.3) !important;
+    background: linear-gradient(135deg, 
+        rgba(15, 15, 20, 0.98) 0%, 
+        rgba(25, 25, 35, 0.95) 50%, 
+        rgba(139, 0, 0, 0.4) 100%) !important;
+    border: 3px solid rgba(200, 50, 50, 0.8) !important;
+    box-shadow: 
+        0 8px 24px rgba(139, 0, 0, 0.5),
+        inset 0 0 20px rgba(139, 0, 0, 0.2),
+        0 0 30px rgba(200, 50, 50, 0.3) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.aot-deck::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(139, 0, 0, 0.03) 10px,
+            rgba(139, 0, 0, 0.03) 20px
+        );
+    animation: aot-pattern 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes aot-pattern {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
 }
 
 .aot-deck .deck-emoji {
-    background: linear-gradient(135deg, rgba(139, 0, 0, 0.4), rgba(139, 0, 0, 0.2)) !important;
-    border: 2px solid rgba(139, 0, 0, 0.7) !important;
-    box-shadow: 0 6px 12px rgba(139, 0, 0, 0.4) !important;
+    background: linear-gradient(135deg, 
+        rgba(200, 50, 50, 0.6), 
+        rgba(139, 0, 0, 0.4)) !important;
+    border: 3px solid rgba(255, 100, 100, 0.8) !important;
+    box-shadow: 
+        0 8px 16px rgba(139, 0, 0, 0.6),
+        inset 0 0 15px rgba(255, 100, 100, 0.3),
+        0 0 20px rgba(200, 50, 50, 0.5) !important;
+    transform: scale(1.1);
+    position: relative;
+    z-index: 1;
 }
 
 .aot-deck .deck-name {
-    color: rgba(255, 255, 255, 0.95) !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 215, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        2px 2px 0 rgba(139, 0, 0, 0.8) !important;
+    font-weight: 900 !important;
+    font-family: 'Noto Sans JP', sans-serif !important;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
 }
 
 .aot-deck .deck-card-count {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 1;
 }
 
 .aot-deck .age-rating {
-    background: linear-gradient(90deg, rgba(139, 0, 0, 0.9), rgba(139, 0, 0, 0.7)) !important;
+    background: linear-gradient(90deg, 
+        rgba(200, 50, 50, 1), 
+        rgba(139, 0, 0, 0.9)) !important;
+    border: 2px solid rgba(255, 100, 100, 0.8) !important;
+    box-shadow: 0 4px 8px rgba(139, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
 }
 
-/* Стили для карт "Атака титанов" */
+/* Аниме-стиль для карт "Атака титанов" */
 .aot-card .card-front,
 .aot-card .card-back {
-    box-shadow: 0 12px 24px rgba(139, 0, 0, 0.4) !important;
+    background: linear-gradient(135deg, 
+        rgba(10, 10, 15, 0.98) 0%,
+        rgba(20, 20, 30, 0.95) 30%,
+        rgba(139, 0, 0, 0.3) 70%,
+        rgba(15, 15, 20, 0.98) 100%) !important;
+    border: 3px solid rgba(200, 50, 50, 0.7) !important;
+    box-shadow: 
+        0 12px 32px rgba(139, 0, 0, 0.6),
+        inset 0 0 30px rgba(139, 0, 0, 0.2),
+        0 0 40px rgba(200, 50, 50, 0.4) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.aot-card .card-front::before,
+.aot-card .card-back::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(200, 50, 50, 0.1) 0%, transparent 50%),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 0, 0, 0.05) 2px,
+            rgba(139, 0, 0, 0.05) 4px
+        );
+    animation: aot-card-shimmer 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes aot-card-shimmer {
+    0%, 100% { opacity: 0.3; transform: translate(0, 0) rotate(0deg); }
+    50% { opacity: 0.6; transform: translate(10px, 10px) rotate(5deg); }
 }
 
 .aot-card .card-text {
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 10px rgba(139, 0, 0, 0.3);
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.9),
+        0 0 30px rgba(255, 215, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.8),
+        2px 2px 0 rgba(139, 0, 0, 0.9) !important;
+    font-family: 'Noto Sans JP', sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Стили для квиз-ответов в AOT */
+.aot-card .quiz-answer {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(139, 0, 0, 0.3);
+    border: 2px solid rgba(200, 50, 50, 0.6);
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.aot-card .quiz-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 215, 0, 0.9);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    margin-bottom: 8px;
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 1px;
+}
+
+.aot-card .quiz-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.6);
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* Аниме-стиль кнопок для AOT */
+.aot-card-viewer .random-button,
+.aot-card-viewer .flip-button {
+    background: linear-gradient(135deg, 
+        rgba(200, 50, 50, 0.9), 
+        rgba(139, 0, 0, 0.8)) !important;
+    border: 2px solid rgba(255, 100, 100, 0.8) !important;
+    box-shadow: 
+        0 6px 16px rgba(139, 0, 0, 0.6),
+        inset 0 0 10px rgba(255, 100, 100, 0.2),
+        0 0 20px rgba(200, 50, 50, 0.4) !important;
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.6) !important;
+    font-family: 'Noto Sans JP', sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease !important;
+}
+
+.aot-card-viewer .random-button:active,
+.aot-card-viewer .flip-button:active {
+    transform: scale(0.95) !important;
+    box-shadow: 
+        0 3px 8px rgba(139, 0, 0, 0.4),
+        inset 0 0 15px rgba(255, 100, 100, 0.3) !important;
+}
+
+.aot-card-viewer .arrow-button {
+    background: linear-gradient(135deg, 
+        rgba(139, 0, 0, 0.9), 
+        rgba(100, 0, 0, 0.8)) !important;
+    border: 2px solid rgba(200, 50, 50, 0.8) !important;
+    box-shadow: 
+        0 4px 12px rgba(139, 0, 0, 0.5),
+        inset 0 0 8px rgba(255, 100, 100, 0.2) !important;
+}
+
+.aot-card-viewer .arrow-button:active:not(:disabled) {
+    transform: scale(0.85) !important;
+}
+
+/* Заголовок для AOT */
+.aot-card-viewer #deck-name-header {
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.9),
+        0 0 30px rgba(255, 215, 0, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        2px 2px 0 rgba(139, 0, 0, 0.9) !important;
+    font-family: 'Noto Sans JP', sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px;
 }
 
 .add-deck-card {
@@ -265,6 +459,43 @@ body {
 /* Экран просмотра карт */
 #card-viewer-screen {
     background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(26, 26, 46, 0.85) 50%, rgba(110, 92, 231, 0.3) 100%);
+}
+
+/* Аниме-фон для AOT */
+#card-viewer-screen.aot-card-viewer {
+    background: linear-gradient(135deg, 
+        rgba(10, 10, 15, 0.98) 0%,
+        rgba(15, 15, 20, 0.95) 30%,
+        rgba(139, 0, 0, 0.2) 70%,
+        rgba(10, 10, 15, 0.98) 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#card-viewer-screen.aot-card-viewer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 50px,
+            rgba(139, 0, 0, 0.03) 50px,
+            rgba(139, 0, 0, 0.03) 100px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 50px,
+            rgba(139, 0, 0, 0.03) 50px,
+            rgba(139, 0, 0, 0.03) 100px
+        );
+    pointer-events: none;
+    z-index: 0;
 }
 
 .card-viewer-header {

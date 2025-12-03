@@ -124,7 +124,15 @@ function openDeck(deckId) {
     isCardFlipped = false;
     
     document.getElementById('deck-list-screen').classList.remove('active');
-    document.getElementById('card-viewer-screen').classList.add('active');
+    const cardViewerScreen = document.getElementById('card-viewer-screen');
+    cardViewerScreen.classList.add('active');
+    
+    // Добавляем специальный класс для AOT колоды
+    if (deck.name === "Атака титанов") {
+        cardViewerScreen.classList.add('aot-card-viewer');
+    } else {
+        cardViewerScreen.classList.remove('aot-card-viewer');
+    }
     
     updateCardViewer();
 }
@@ -192,18 +200,34 @@ function updateCardViewer() {
     } else {
         // Для остальных колод - обычная логика
         eternityHintBlock.style.display = 'none';
-        document.getElementById('additional-question').textContent = card.additionalQuestion;
         
-        // Отобразить блок "или то, или то", если есть
+        // Проверка на квиз-режим
+        const quizAnswer = document.getElementById('quiz-answer');
+        const quizText = document.getElementById('quiz-text');
         const alternativesText = document.getElementById('alternatives-text');
         const alternativesDivider = document.getElementById('alternatives-divider');
-        if (card.alternatives) {
-            alternativesText.textContent = card.alternatives;
-            alternativesBlock.style.display = 'block';
-            alternativesDivider.style.display = 'block';
-        } else {
+        
+        if (card.isQuiz && card.correctAnswer) {
+            // Квиз-режим: показываем правильный ответ
+            document.getElementById('additional-question').textContent = card.additionalQuestion;
+            quizText.textContent = card.correctAnswer;
+            quizAnswer.style.display = 'block';
             alternativesBlock.style.display = 'none';
             alternativesDivider.style.display = 'none';
+        } else {
+            // Обычный режим
+            quizAnswer.style.display = 'none';
+            document.getElementById('additional-question').textContent = card.additionalQuestion;
+            
+            // Отобразить блок "или то, или то", если есть
+            if (card.alternatives) {
+                alternativesText.textContent = card.alternatives;
+                alternativesBlock.style.display = 'block';
+                alternativesDivider.style.display = 'block';
+            } else {
+                alternativesBlock.style.display = 'none';
+                alternativesDivider.style.display = 'none';
+            }
         }
     }
     
