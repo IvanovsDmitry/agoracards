@@ -155,7 +155,7 @@ function updateCardViewer() {
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
     
-    if (currentDeck.name === "Вопросы вечности") {
+    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
         // Для колоды "Вопросы вечности" парсим подсказку и уточняющий вопрос
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
@@ -200,34 +200,21 @@ function updateCardViewer() {
     } else {
         // Для остальных колод - обычная логика
         eternityHintBlock.style.display = 'none';
-        
-        // Проверка на квиз-режим
         const quizAnswer = document.getElementById('quiz-answer');
-        const quizText = document.getElementById('quiz-text');
+        quizAnswer.style.display = 'none';
+        
+        document.getElementById('additional-question').textContent = card.additionalQuestion;
+        
+        // Отобразить блок "или то, или то", если есть
         const alternativesText = document.getElementById('alternatives-text');
         const alternativesDivider = document.getElementById('alternatives-divider');
-        
-        if (card.isQuiz && card.correctAnswer) {
-            // Квиз-режим: показываем правильный ответ
-            document.getElementById('additional-question').textContent = card.additionalQuestion;
-            quizText.textContent = card.correctAnswer;
-            quizAnswer.style.display = 'block';
+        if (card.alternatives) {
+            alternativesText.textContent = card.alternatives;
+            alternativesBlock.style.display = 'block';
+            alternativesDivider.style.display = 'block';
+        } else {
             alternativesBlock.style.display = 'none';
             alternativesDivider.style.display = 'none';
-        } else {
-            // Обычный режим
-            quizAnswer.style.display = 'none';
-            document.getElementById('additional-question').textContent = card.additionalQuestion;
-            
-            // Отобразить блок "или то, или то", если есть
-            if (card.alternatives) {
-                alternativesText.textContent = card.alternatives;
-                alternativesBlock.style.display = 'block';
-                alternativesDivider.style.display = 'block';
-            } else {
-                alternativesBlock.style.display = 'none';
-                alternativesDivider.style.display = 'none';
-            }
         }
     }
     
@@ -261,24 +248,49 @@ function updateCardColor() {
             'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5');
     }
     
-    if (currentDeck.name === "Атака титанов") {
+    // Убираем все классы стилей
+    if (flipCard) {
+        flipCard.classList.remove('aot-card', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+            'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5',
+            'deck-friends', 'deck-kids', 'deck-family', 'deck-couples', 'deck-bestfriends', 'deck-eternity');
+    }
+    
+    // Применяем индивидуальные стили для каждой колоды
+    const deckName = currentDeck.name;
+    
+    if (deckName === "Атака титанов") {
         // Специальный дизайн для "Атака титанов"
-        if (cardFront) {
-            cardFront.style.background = `linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(40, 40, 40, 0.9), rgba(139, 0, 0, 0.4))`;
-            cardFront.style.border = `2px solid rgba(139, 0, 0, 0.5)`;
-        }
-        if (cardBack) {
-            cardBack.style.background = `linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(35, 35, 35, 0.9), rgba(139, 0, 0, 0.3))`;
-            cardBack.style.border = `2px solid rgba(139, 0, 0, 0.5)`;
-        }
-        if (flipCard) {
-            flipCard.classList.add('aot-card');
-        }
-        // Скрываем фоновые иллюстрации для AOT (используется специальный стиль)
+        if (flipCard) flipCard.classList.add('aot-card');
         if (cardFrontBg) cardFrontBg.style.display = 'none';
         if (cardBackBg) cardBackBg.style.display = 'none';
-    } else {
-        // Обычный дизайн для остальных колод с иллюстрациями
+    } else if (deckName === "Компания людей") {
+        if (flipCard) flipCard.classList.add('deck-friends');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Маленькие люди") {
+        if (flipCard) flipCard.classList.add('deck-kids');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Большая семья") {
+        if (flipCard) flipCard.classList.add('deck-family');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Узнать друг друга глубже") {
+        if (flipCard) flipCard.classList.add('deck-couples');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Мой любимый собеседник") {
+        if (flipCard) flipCard.classList.add('deck-bestfriends');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Вопросы вечности") {
+        if (flipCard) flipCard.classList.add('deck-eternity');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    }
+    
+    // Применяем цвет колоды к картам (если не AOT)
+    if (deckName !== "Атака титанов") {
         const colorHex = currentDeck.colorHex;
         if (cardFront) {
             cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
@@ -286,36 +298,6 @@ function updateCardColor() {
         }
         if (cardBack) {
             cardBack.style.border = `2px solid rgba(255, 255, 255, 0.3)`;
-        }
-        if (flipCard) {
-            flipCard.classList.remove('aot-card');
-        }
-        
-        // Применяем уникальные паттерны иллюстраций в зависимости от колоды
-        const deckNames = ["Компания людей", "Маленькие люди", "Большая семья", 
-                          "Узнать друг друга глубже", "Мой любимый собеседник", "Вопросы вечности"];
-        const deckIndex = deckNames.indexOf(currentDeck.name);
-        const patternClass = `deck-illustration-pattern-${(deckIndex % 5) + 1}`;
-        
-        if (flipCard && deckIndex !== -1) {
-            flipCard.classList.add(patternClass);
-        }
-        
-        // Показываем фоновые иллюстрации
-        if (cardFrontBg) {
-            cardFrontBg.style.display = 'block';
-            // Применяем цвет колоды к паттерну
-            const r = parseInt(colorHex.slice(1, 3), 16);
-            const g = parseInt(colorHex.slice(3, 5), 16);
-            const b = parseInt(colorHex.slice(5, 7), 16);
-            cardFrontBg.style.filter = `hue-rotate(${deckIndex * 30}deg) saturate(1.2)`;
-        }
-        if (cardBackBg) {
-            cardBackBg.style.display = 'block';
-            const r = parseInt(colorHex.slice(1, 3), 16);
-            const g = parseInt(colorHex.slice(3, 5), 16);
-            const b = parseInt(colorHex.slice(5, 7), 16);
-            cardBackBg.style.filter = `hue-rotate(${deckIndex * 30}deg) saturate(1.2)`;
         }
     }
 }

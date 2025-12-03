@@ -767,43 +767,155 @@ body {
     overflow-y: auto;
 }
 
-/* Улучшенная читаемость текста поверх иллюстраций - ТОЛЬКО для AOT */
-.aot-card .card-content .card-text {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 16px 20px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+/* Стили для AOT - формат как у "Вопросы вечности" (без окон и блоков) */
+/* Текст для AOT использует стандартные стили без дополнительных блоков */
+
+.aot-card .card-content .hint-text {
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 215, 0, 0.85);
+    text-align: center;
+    line-height: 1.4;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.6);
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
-.aot-card .card-content .alternatives-text,
-.aot-card .card-content .quiz-text,
 .aot-card .card-content .clarifying-question {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 12px 16px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 8px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFD700;
+    text-align: center;
+    line-height: 1.4;
+    text-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.9),
+        0 0 30px rgba(255, 215, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.8),
+        2px 2px 0 rgba(139, 0, 0, 0.9);
+    margin-top: 20px;
+    margin-bottom: 0;
 }
 
-.aot-card .card-content .quiz-answer {
-    background: rgba(0, 0, 0, 0.6) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+/* Индивидуальные стили для каждой колоды */
+
+/* Компания людей - теплые, дружеские тона */
+.deck-friends .card-background {
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 200, 87, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(255, 107, 107, 0.4), rgba(255, 200, 87, 0.3));
+    background-size: 200% 200%, 200% 200%, 100% 100%;
+    animation: pattern-move 20s ease-in-out infinite;
+}
+
+.deck-friends .card-front,
+.deck-friends .card-back {
+    background: linear-gradient(135deg, 
+        rgba(255, 107, 107, 0.95) 0%,
+        rgba(255, 200, 87, 0.8) 50%,
+        rgba(255, 107, 107, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Маленькие люди - яркие, игривые цвета */
+.deck-kids .card-background {
+    background: 
+        radial-gradient(circle at 30% 40%, rgba(78, 205, 196, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(78, 205, 196, 0.4), rgba(149, 225, 211, 0.3));
+    background-size: 200% 200%, 200% 200%, 100% 100%;
+    animation: pattern-move 25s ease-in-out infinite;
+}
+
+.deck-kids .card-front,
+.deck-kids .card-back {
+    background: linear-gradient(135deg, 
+        rgba(78, 205, 196, 0.95) 0%,
+        rgba(149, 225, 211, 0.8) 50%,
+        rgba(78, 205, 196, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Большая семья - теплые семейные тона */
+.deck-family .card-background {
+    background: 
+        radial-gradient(ellipse at top, rgba(149, 225, 211, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(248, 129, 129, 0.2) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(149, 225, 211, 0.4), rgba(248, 129, 129, 0.3));
+    background-size: 100% 50%, 100% 50%, 100% 100%;
+    animation: pattern-shift 18s ease-in-out infinite;
+}
+
+.deck-family .card-front,
+.deck-family .card-back {
+    background: linear-gradient(135deg, 
+        rgba(149, 225, 211, 0.95) 0%,
+        rgba(248, 129, 129, 0.8) 50%,
+        rgba(149, 225, 211, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Узнать друг друга глубже - романтические тона */
+.deck-couples .card-background {
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(243, 129, 129, 0.3) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(243, 129, 129, 0.4), rgba(255, 107, 107, 0.3));
+    background-size: 150% 150%, 100% 100%;
+    animation: pattern-pulse 15s ease-in-out infinite;
+}
+
+.deck-couples .card-front,
+.deck-couples .card-back {
+    background: linear-gradient(135deg, 
+        rgba(243, 129, 129, 0.95) 0%,
+        rgba(255, 107, 107, 0.8) 50%,
+        rgba(243, 129, 129, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Мой любимый собеседник - дружеские, но более глубокие тона */
+.deck-bestfriends .card-background {
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(170, 150, 218, 0.1) 10px,
+            rgba(170, 150, 218, 0.1) 20px
+        ),
+        linear-gradient(135deg, rgba(170, 150, 218, 0.4), rgba(108, 92, 231, 0.3));
+    background-size: 40px 40px, 100% 100%;
+}
+
+.deck-bestfriends .card-front,
+.deck-bestfriends .card-back {
+    background: linear-gradient(135deg, 
+        rgba(170, 150, 218, 0.95) 0%,
+        rgba(108, 92, 231, 0.8) 50%,
+        rgba(170, 150, 218, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Вопросы вечности - мистические, глубокие тона */
+.deck-eternity .card-background {
+    background: 
+        radial-gradient(ellipse at top, rgba(108, 92, 231, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(26, 26, 46, 0.4) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(108, 92, 231, 0.4), rgba(26, 26, 46, 0.5));
+    background-size: 100% 50%, 100% 50%, 100% 100%;
+    animation: pattern-shift 20s ease-in-out infinite;
+}
+
+.deck-eternity .card-front,
+.deck-eternity .card-back {
+    background: linear-gradient(135deg, 
+        rgba(108, 92, 231, 0.95) 0%,
+        rgba(26, 26, 46, 0.9) 50%,
+        rgba(108, 92, 231, 0.95) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
 }
 
 /* Уникальные иллюстрации для разных колод через CSS паттерны */
