@@ -247,7 +247,7 @@ body {
     z-index: 1;
 }
 
-/* Аниме-стиль для карт "Атака титанов" */
+/* Аниме-стиль для карт "Атака титанов" - базовые стили */
 .aot-card .card-front,
 .aot-card .card-back {
     background: 
@@ -765,6 +765,62 @@ body {
     justify-content: flex-start;
     padding-top: 40px;
     overflow-y: auto;
+}
+
+/* Разные стили для двух колод AOT */
+
+/* Атака титанов (Квиз) - темный, мистический стиль с подсказками */
+.aot-quiz .card-front,
+.aot-quiz .card-back {
+    background: 
+        linear-gradient(135deg, 
+            rgba(10, 10, 15, 0.98) 0%,
+            rgba(20, 20, 30, 0.95) 30%,
+            rgba(139, 0, 0, 0.4) 70%,
+            rgba(15, 15, 20, 0.98) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 0, 0, 0.15) 2px, rgba(139, 0, 0, 0.15) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139, 0, 0, 0.15) 2px, rgba(139, 0, 0, 0.15) 4px) !important;
+    border: 3px solid rgba(200, 50, 50, 0.8) !important;
+    box-shadow: 
+        0 12px 32px rgba(139, 0, 0, 0.7),
+        inset 0 0 40px rgba(139, 0, 0, 0.3),
+        0 0 50px rgba(200, 50, 50, 0.5) !important;
+}
+
+.aot-quiz .card-text {
+    color: #FFD700 !important;
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 1),
+        0 0 40px rgba(255, 215, 0, 0.7),
+        0 2px 8px rgba(0, 0, 0, 0.9),
+        3px 3px 0 rgba(139, 0, 0, 1) !important;
+}
+
+/* Атака титанов (Разговорные) - более светлый, дружественный стиль */
+.aot-conversation .card-front,
+.aot-conversation .card-back {
+    background: 
+        linear-gradient(135deg, 
+            rgba(44, 24, 16, 0.95) 0%,
+            rgba(60, 40, 30, 0.9) 30%,
+            rgba(139, 69, 19, 0.4) 70%,
+            rgba(44, 24, 16, 0.95) 100%),
+        radial-gradient(ellipse at 30% 40%, rgba(184, 134, 11, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(139, 69, 19, 0.2) 0%, transparent 50%) !important;
+    border: 3px solid rgba(184, 134, 11, 0.6) !important;
+    box-shadow: 
+        0 12px 32px rgba(139, 69, 19, 0.5),
+        inset 0 0 30px rgba(184, 134, 11, 0.2),
+        0 0 40px rgba(184, 134, 11, 0.3) !important;
+}
+
+.aot-conversation .card-text {
+    color: #F4D03F !important;
+    text-shadow: 
+        0 0 15px rgba(244, 208, 63, 0.8),
+        0 0 30px rgba(244, 208, 63, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.8),
+        2px 2px 0 rgba(139, 69, 19, 0.8) !important;
 }
 
 /* Стили для AOT - формат как у "Вопросы вечности" (без окон и блоков) */

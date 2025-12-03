@@ -155,7 +155,7 @@ function updateCardViewer() {
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
     
-    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
+    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов (Квиз)") {
         // Для колоды "Вопросы вечности" парсим подсказку и уточняющий вопрос
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
@@ -250,7 +250,7 @@ function updateCardColor() {
     
     // Убираем все классы стилей
     if (flipCard) {
-        flipCard.classList.remove('aot-card', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+        flipCard.classList.remove('aot-card', 'aot-quiz', 'aot-conversation', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
             'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5',
             'deck-friends', 'deck-kids', 'deck-family', 'deck-couples', 'deck-bestfriends', 'deck-eternity');
     }
@@ -259,8 +259,13 @@ function updateCardColor() {
     const deckName = currentDeck.name;
     
     if (deckName === "Атака титанов") {
-        // Специальный дизайн для "Атака титанов"
-        if (flipCard) flipCard.classList.add('aot-card');
+        // Специальный дизайн для "Атака титанов" (разговорные карты)
+        if (flipCard) flipCard.classList.add('aot-card', 'aot-conversation');
+        if (cardFrontBg) cardFrontBg.style.display = 'none';
+        if (cardBackBg) cardBackBg.style.display = 'none';
+    } else if (deckName === "Атака титанов (Квиз)") {
+        // Специальный дизайн для "Атака титанов (Квиз)"
+        if (flipCard) flipCard.classList.add('aot-card', 'aot-quiz');
         if (cardFrontBg) cardFrontBg.style.display = 'none';
         if (cardBackBg) cardBackBg.style.display = 'none';
     } else if (deckName === "Компания людей") {
@@ -290,7 +295,7 @@ function updateCardColor() {
     }
     
     // Применяем цвет колоды к картам (если не AOT)
-    if (deckName !== "Атака титанов") {
+    if (deckName !== "Атака титанов" && deckName !== "Атака титанов (Квиз)") {
         const colorHex = currentDeck.colorHex;
         if (cardFront) {
             cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
