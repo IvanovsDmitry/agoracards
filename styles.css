@@ -161,6 +161,42 @@ body {
     margin-top: 8px;
 }
 
+/* Специальный дизайн для колоды "Атака титанов" */
+.aot-deck {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(40, 40, 40, 0.9), rgba(139, 0, 0, 0.3)) !important;
+    border: 2px solid rgba(139, 0, 0, 0.6) !important;
+    box-shadow: 0 8px 16px rgba(139, 0, 0, 0.3) !important;
+}
+
+.aot-deck .deck-emoji {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.4), rgba(139, 0, 0, 0.2)) !important;
+    border: 2px solid rgba(139, 0, 0, 0.7) !important;
+    box-shadow: 0 6px 12px rgba(139, 0, 0, 0.4) !important;
+}
+
+.aot-deck .deck-name {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.aot-deck .deck-card-count {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.aot-deck .age-rating {
+    background: linear-gradient(90deg, rgba(139, 0, 0, 0.9), rgba(139, 0, 0, 0.7)) !important;
+}
+
+/* Стили для карт "Атака титанов" */
+.aot-card .card-front,
+.aot-card .card-back {
+    box-shadow: 0 12px 24px rgba(139, 0, 0, 0.4) !important;
+}
+
+.aot-card .card-text {
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6), 0 0 10px rgba(139, 0, 0, 0.3);
+}
+
 .add-deck-card {
     background: transparent;
     border: 2px dashed rgba(46, 134, 171, 0.6);
@@ -358,8 +394,16 @@ body {
     display: none;
 }
 
+.alternatives-divider {
+    margin: 16px 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
 .alternatives-text {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 400;
     font-style: italic;
     color: rgba(255, 255, 255, 0.9);
@@ -408,15 +452,14 @@ body {
 .random-button {
     width: 100%;
     padding: 14px 24px;
-    background: linear-gradient(90deg, var(--gold), rgba(212, 175, 55, 0.8));
-    border: none;
+    background: linear-gradient(135deg, rgba(46, 134, 171, 0.3), rgba(46, 134, 171, 0.2));
+    border: 2px solid rgba(46, 134, 171, 0.6);
     border-radius: 28px;
     color: white;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     margin-bottom: 18px;
-    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.5);
     transition: transform 0.2s;
 }
 
@@ -457,13 +500,14 @@ body {
 .flip-button {
     flex: 1;
     padding: 14px 20px;
-    background: linear-gradient(135deg, rgba(46, 134, 171, 0.3), rgba(46, 134, 171, 0.2));
-    border: 2px solid rgba(46, 134, 171, 0.6);
+    background: linear-gradient(90deg, var(--gold), rgba(212, 175, 55, 0.8));
+    border: none;
     border-radius: 28px;
     color: white;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 6px 12px rgba(212, 175, 55, 0.5);
     transition: transform 0.2s;
 }
 

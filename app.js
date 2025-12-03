@@ -79,7 +79,9 @@ function renderDecks() {
 // Создать карточку колоды
 function createDeckCard(deck) {
     const card = document.createElement('div');
-    card.className = 'deck-card';
+    // Специальный класс для колоды "Атака титанов"
+    const deckClass = deck.name === "Атака титанов" ? "deck-card aot-deck" : "deck-card";
+    card.className = deckClass;
     card.innerHTML = `
         <div class="deck-emoji">${deck.emoji}</div>
         <div class="deck-name">${deck.name}</div>
@@ -194,11 +196,14 @@ function updateCardViewer() {
         
         // Отобразить блок "или то, или то", если есть
         const alternativesText = document.getElementById('alternatives-text');
+        const alternativesDivider = document.getElementById('alternatives-divider');
         if (card.alternatives) {
             alternativesText.textContent = card.alternatives;
             alternativesBlock.style.display = 'block';
+            alternativesDivider.style.display = 'block';
         } else {
             alternativesBlock.style.display = 'none';
+            alternativesDivider.style.display = 'none';
         }
     }
     
@@ -220,10 +225,36 @@ function updateCardViewer() {
 
 // Обновить цвет карты
 function updateCardColor() {
-    const colorHex = currentDeck.colorHex;
     const cardFront = document.querySelector('.card-front');
-    if (cardFront) {
-        cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
+    const cardBack = document.querySelector('.card-back');
+    const flipCard = document.getElementById('flip-card');
+    
+    if (currentDeck.name === "Атака титанов") {
+        // Специальный дизайн для "Атака титанов"
+        if (cardFront) {
+            cardFront.style.background = `linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(40, 40, 40, 0.9), rgba(139, 0, 0, 0.4))`;
+            cardFront.style.border = `2px solid rgba(139, 0, 0, 0.5)`;
+        }
+        if (cardBack) {
+            cardBack.style.background = `linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(35, 35, 35, 0.9), rgba(139, 0, 0, 0.3))`;
+            cardBack.style.border = `2px solid rgba(139, 0, 0, 0.5)`;
+        }
+        if (flipCard) {
+            flipCard.classList.add('aot-card');
+        }
+    } else {
+        // Обычный дизайн для остальных колод
+        const colorHex = currentDeck.colorHex;
+        if (cardFront) {
+            cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
+            cardFront.style.border = `2px solid rgba(255, 255, 255, 0.3)`;
+        }
+        if (cardBack) {
+            cardBack.style.border = `2px solid rgba(255, 255, 255, 0.3)`;
+        }
+        if (flipCard) {
+            flipCard.classList.remove('aot-card');
+        }
     }
 }
 
