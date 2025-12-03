@@ -58,6 +58,12 @@ function showDeckList() {
     document.getElementById('deck-list-screen').classList.add('active');
     document.getElementById('card-viewer-screen').classList.remove('active');
     document.getElementById('edit-deck-screen').classList.remove('active');
+    
+    // Отслеживаем возврат на главный экран
+    if (analytics) {
+        analytics.trackScreenView('deck_list');
+    }
+    
     renderDecks();
 }
 
@@ -123,6 +129,12 @@ function openDeck(deckId) {
     currentCardIndex = 0;
     isCardFlipped = false;
     
+    // Отслеживаем открытие колоды
+    if (analytics) {
+        analytics.trackDeckOpen(deck.name);
+        analytics.trackScreenView(`deck_${deck.name}`);
+    }
+    
     document.getElementById('deck-list-screen').classList.remove('active');
     const cardViewerScreen = document.getElementById('card-viewer-screen');
     cardViewerScreen.classList.add('active');
@@ -155,7 +167,7 @@ function updateCardViewer() {
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
     
-    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов (Квиз)") {
+    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
         // Для колоды "Вопросы вечности" парсим подсказку и уточняющий вопрос
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
@@ -250,7 +262,7 @@ function updateCardColor() {
     
     // Убираем все классы стилей
     if (flipCard) {
-        flipCard.classList.remove('aot-card', 'aot-quiz', 'aot-conversation', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+        flipCard.classList.remove('aot-card', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
             'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5',
             'deck-friends', 'deck-kids', 'deck-family', 'deck-couples', 'deck-bestfriends', 'deck-eternity');
     }
@@ -259,13 +271,8 @@ function updateCardColor() {
     const deckName = currentDeck.name;
     
     if (deckName === "Атака титанов") {
-        // Специальный дизайн для "Атака титанов" (разговорные карты)
-        if (flipCard) flipCard.classList.add('aot-card', 'aot-conversation');
-        if (cardFrontBg) cardFrontBg.style.display = 'none';
-        if (cardBackBg) cardBackBg.style.display = 'none';
-    } else if (deckName === "Атака титанов (Квиз)") {
-        // Специальный дизайн для "Атака титанов (Квиз)"
-        if (flipCard) flipCard.classList.add('aot-card', 'aot-quiz');
+        // Специальный дизайн для "Атака титанов"
+        if (flipCard) flipCard.classList.add('aot-card');
         if (cardFrontBg) cardFrontBg.style.display = 'none';
         if (cardBackBg) cardBackBg.style.display = 'none';
     } else if (deckName === "Компания людей") {
@@ -295,7 +302,7 @@ function updateCardColor() {
     }
     
     // Применяем цвет колоды к картам (если не AOT)
-    if (deckName !== "Атака титанов" && deckName !== "Атака титанов (Квиз)") {
+    if (deckName !== "Атака титанов") {
         const colorHex = currentDeck.colorHex;
         if (cardFront) {
             cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
@@ -318,6 +325,12 @@ function showRandomCard() {
     
     currentCardIndex = newIndex;
     isCardFlipped = false;
+    
+    // Отслеживаем случайную карту
+    if (analytics) {
+        analytics.trackRandomCard(currentDeck.name);
+    }
+    
     updateCardViewer();
 }
 
@@ -326,6 +339,12 @@ function showPreviousCard() {
     if (currentCardIndex > 0) {
         currentCardIndex--;
         isCardFlipped = false;
+        
+        // Отслеживаем переключение карты
+        if (analytics && currentDeck) {
+            analytics.trackCardChange(currentDeck.name, 'previous');
+        }
+        
         updateCardViewer();
     }
 }
@@ -335,6 +354,12 @@ function showNextCard() {
     if (currentDeck && currentCardIndex < currentDeck.cards.length - 1) {
         currentCardIndex++;
         isCardFlipped = false;
+        
+        // Отслеживаем переключение карты
+        if (analytics && currentDeck) {
+            analytics.trackCardChange(currentDeck.name, 'next');
+        }
+        
         updateCardViewer();
     }
 }
@@ -343,6 +368,11 @@ function showNextCard() {
 function flipCard() {
     const flipCardElement = document.getElementById('flip-card');
     isCardFlipped = !isCardFlipped;
+    
+    // Отслеживаем переворот карты
+    if (analytics && currentDeck) {
+        analytics.trackCardFlip(currentDeck.name);
+    }
     
     if (isCardFlipped) {
         flipCardElement.classList.add('flipped');
