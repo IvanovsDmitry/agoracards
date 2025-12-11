@@ -172,16 +172,14 @@ function updateCardViewer() {
     const cardBackSimple = document.getElementById('card-back-simple');
     
     if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
-        // Для специальных колод показываем старую структуру
-        if (cardBackSplit) cardBackSplit.style.display = 'none';
-        if (cardBackSimple) cardBackSimple.style.display = 'block';
-        
-        // Для колоды "Вопросы вечности" и "Атака титанов" парсим подсказку и уточняющий вопрос
+        // Для специальных колод используем новую структуру с двумя частями
+        if (cardBackSplit) cardBackSplit.style.display = 'flex';
+        if (cardBackSimple) cardBackSimple.style.display = 'none';
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
         
         if (card.additionalQuestion) {
-            // Формат: "Уточняющий вопрос\n\n💭 Подсказка: ...\n\n«Цитата»"
+            // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
             const text = card.additionalQuestion;
             
             // Ищем подсказку
@@ -200,31 +198,41 @@ function updateCardViewer() {
                 // Всё до последней части - это подсказка с цитатой
                 const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
                 
-                // Убираем цитату из подсказки (между « и »)
-                const hintWithoutQuote = hintWithQuote.replace(/«[^»]*»\s*/g, '').trim();
+                // Извлекаем цитату (между « и »)
+                const quoteMatch = hintWithQuote.match(/«([^»]*)»/);
+                const quote = quoteMatch ? quoteMatch[1] : '';
                 
-                // Порядок отображения: подсказка (курсив) → пропуск → уточняющий вопрос (обычный)
-                const additionalQuestionEl = document.getElementById('additional-question');
-                if (additionalQuestionEl) {
-                    additionalQuestionEl.textContent = '';
+                // Верхняя часть: цитата
+                const mainQuestionBack = document.getElementById('main-question-back');
+                if (mainQuestionBack) {
+                    if (quote) {
+                        mainQuestionBack.textContent = '«' + quote + '»';
+                    } else {
+                        mainQuestionBack.textContent = '';
+                    }
                 }
-                document.getElementById('hint-text').textContent = hintWithoutQuote;
-                document.getElementById('clarifying-question').textContent = clarifyingQuestion;
-                eternityHintBlock.style.display = 'block';
+                
+                // Нижняя часть: дополнительный вопрос
+                const additionalQuestionBack = document.getElementById('additional-question-back');
+                if (additionalQuestionBack) {
+                    additionalQuestionBack.textContent = clarifyingQuestion;
+                }
             } else {
                 // Если формат не найден, показываем как обычно
+                if (cardBackSplit) cardBackSplit.style.display = 'none';
+                if (cardBackSimple) cardBackSimple.style.display = 'block';
                 const additionalQuestionEl = document.getElementById('additional-question');
                 if (additionalQuestionEl) {
                     additionalQuestionEl.textContent = card.additionalQuestion;
                 }
-                eternityHintBlock.style.display = 'none';
             }
         } else {
+            if (cardBackSplit) cardBackSplit.style.display = 'none';
+            if (cardBackSimple) cardBackSimple.style.display = 'block';
             const additionalQuestionEl = document.getElementById('additional-question');
             if (additionalQuestionEl) {
                 additionalQuestionEl.textContent = '';
             }
-            eternityHintBlock.style.display = 'none';
         }
     } else {
         // Для остальных колод - новая структура с двумя вопросами
