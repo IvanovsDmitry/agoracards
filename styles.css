@@ -51,93 +51,120 @@ body {
 /* Заголовок приложения */
 .header-container {
     text-align: center;
-    padding: 32px 20px 24px;
+    padding: 24px 20px 20px;
     background: var(--background);
+    border-bottom: 1px solid var(--border);
 }
 
 .logo {
-    font-size: 48px;
-    margin-bottom: 16px;
+    font-size: 56px;
+    margin-bottom: 12px;
     display: inline-block;
-    padding: 16px;
-    background: var(--card-bg);
-    border-radius: 18px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid var(--border);
+    padding: 12px;
+    background: transparent;
+    border-radius: 20px;
+    transition: transform 0.2s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 .app-title {
-    font-size: 42px;
+    font-size: 32px;
     font-weight: 700;
     color: var(--ink);
-    margin-bottom: 8px;
-    letter-spacing: 2px;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
 }
 
 .subtitle {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
     color: var(--accent);
     margin-bottom: 4px;
 }
 
 .description {
-    font-size: 14px;
-    color: rgba(26, 26, 46, 0.75);
-    opacity: 0.8;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.4;
 }
 
 [data-theme="dark"] .description {
-    color: rgba(232, 232, 232, 0.75);
+    color: rgba(255, 255, 255, 0.6);
 }
 
 /* Сетка колод */
 .decks-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    padding: 0 20px;
+    gap: 12px;
+    padding: 16px;
     flex: 1;
     margin-bottom: 24px;
 }
 
 .deck-card {
     background: var(--marble);
-    border-radius: 16px;
-    padding: 24px 16px;
+    border-radius: 12px;
+    padding: 20px 16px;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
     border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    min-height: 200px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+
+.deck-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent);
 }
 
 [data-theme="dark"] .deck-card {
     background: var(--marble);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .deck-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .deck-card:active {
-    transform: scale(0.97);
+    transform: translateY(0) scale(0.98);
 }
 
 .deck-emoji {
-    font-size: 48px;
-    margin-bottom: 14px;
-    padding: 16px;
+    font-size: 44px;
+    margin-bottom: 12px;
+    padding: 12px;
     background: var(--card-bg);
     border-radius: 50%;
     display: inline-block;
     border: 2px solid var(--accent);
-    box-shadow: 0 2px 8px rgba(51, 144, 236, 0.2);
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.deck-card:hover .deck-emoji {
+    transform: scale(1.05);
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(51, 144, 236, 0.3);
 }
 
 .deck-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     margin-bottom: 6px;
@@ -145,24 +172,26 @@ body {
 }
 
 .deck-card-count {
-    font-size: 12px;
-    color: rgba(26, 26, 46, 0.6);
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.5);
     margin-top: 4px;
+    font-weight: 400;
 }
 
 [data-theme="dark"] .deck-card-count {
-    color: rgba(232, 232, 232, 0.6);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .age-rating {
     display: inline-block;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     color: white;
-    padding: 4px 10px;
+    padding: 3px 8px;
     background: var(--gold);
-    border-radius: 12px;
-    margin-top: 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
 }
 
 /* Специальный аниме-дизайн для колоды "Атака титанов" */
@@ -170,8 +199,8 @@ body {
 
 .aot-deck {
     background: #1A1A1A !important;
-    border: 2px solid #8B0000 !important;
-    box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3) !important;
+    border: 2px solid #C8102E !important;
+    box-shadow: 0 4px 16px rgba(200, 16, 46, 0.4) !important;
     position: relative;
     overflow: hidden;
 }
@@ -179,53 +208,59 @@ body {
 .aot-deck::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: rgba(139, 0, 0, 0.05);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(200, 16, 46, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
     pointer-events: none;
+    z-index: 0;
 }
 
-@keyframes aot-pattern {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+.aot-deck:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(200, 16, 46, 0.5) !important;
+    border-color: #FF4757 !important;
 }
 
 .aot-deck .deck-emoji {
-    background: #8B0000 !important;
-    border: 3px solid #FF6B6B !important;
-    box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4) !important;
-    transform: scale(1.1);
+    background: #C8102E !important;
+    border: 3px solid #FF4757 !important;
+    box-shadow: 0 4px 16px rgba(200, 16, 46, 0.5) !important;
     position: relative;
     z-index: 1;
+    transform: scale(1);
+}
+
+.aot-deck:hover .deck-emoji {
+    transform: scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(200, 16, 46, 0.6) !important;
 }
 
 .aot-deck .deck-name {
     color: #FFD700 !important;
     text-shadow: 
-        0 0 10px rgba(255, 215, 0, 0.8),
-        0 0 20px rgba(255, 215, 0, 0.5),
-        0 2px 4px rgba(0, 0, 0, 0.8),
-        2px 2px 0 rgba(139, 0, 0, 0.8) !important;
-    font-weight: 900 !important;
+        0 0 8px rgba(255, 215, 0, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    font-weight: 700 !important;
     font-family: 'Noto Sans JP', sans-serif !important;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     position: relative;
     z-index: 1;
 }
 
 .aot-deck .deck-card-count {
-    color: rgba(255, 255, 255, 0.9) !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    color: rgba(255, 255, 255, 0.8) !important;
     position: relative;
     z-index: 1;
 }
 
 .aot-deck .age-rating {
-    background: #8B0000 !important;
-    border: 2px solid #FF6B6B !important;
-    box-shadow: 0 2px 6px rgba(139, 0, 0, 0.4);
+    background: #C8102E !important;
+    border: 1px solid #FF4757 !important;
+    box-shadow: 0 2px 8px rgba(200, 16, 46, 0.4);
     position: relative;
     z-index: 1;
 }
@@ -234,8 +269,10 @@ body {
 .aot-card .card-front,
 .aot-card .card-back {
     background: #0A0A0F !important;
-    border: 3px solid #8B0000 !important;
-    box-shadow: 0 8px 24px rgba(139, 0, 0, 0.5) !important;
+    border: 3px solid #C8102E !important;
+    box-shadow: 
+        0 8px 32px rgba(200, 16, 46, 0.4),
+        inset 0 0 40px rgba(200, 16, 46, 0.1) !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -256,10 +293,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(139, 0, 0, 0.1);
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(200, 16, 46, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 0, 0, 0.15) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 .aot-card .card-front::after,
@@ -270,7 +309,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 215, 0, 0.05);
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, rgba(200, 16, 46, 0.1) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
 }
@@ -300,17 +341,18 @@ body {
 .aot-card .card-text {
     color: #FFD700 !important;
     text-shadow: 
-        0 0 15px rgba(255, 215, 0, 0.9),
-        0 0 30px rgba(255, 215, 0, 0.6),
-        0 2px 6px rgba(0, 0, 0, 0.8),
-        2px 2px 0 rgba(139, 0, 0, 0.9) !important;
+        0 0 12px rgba(255, 215, 0, 0.8),
+        0 0 24px rgba(255, 215, 0, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.9),
+        1px 1px 0 rgba(200, 16, 46, 0.8) !important;
     font-family: 'Noto Sans JP', sans-serif !important;
     font-weight: 700 !important;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     position: relative !important;
     z-index: 2 !important;
     transform: none !important;
     backface-visibility: visible !important;
+    line-height: 1.5;
 }
 
 /* Стили для квиз-ответов в AOT */
@@ -347,15 +389,22 @@ body {
 /* Аниме-стиль кнопок для AOT */
 .aot-card-viewer .random-button,
 .aot-card-viewer .flip-button {
-    background: #8B0000 !important;
-    border: 2px solid #FF6B6B !important;
-    box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4) !important;
+    background: #C8102E !important;
+    border: 2px solid #FF4757 !important;
+    box-shadow: 0 4px 16px rgba(200, 16, 46, 0.4) !important;
     color: #FFD700 !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6) !important;
     font-family: 'Noto Sans JP', sans-serif !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px;
     transition: all 0.3s ease !important;
+}
+
+.aot-card-viewer .random-button:hover,
+.aot-card-viewer .flip-button:hover {
+    background: #FF4757 !important;
+    box-shadow: 0 6px 20px rgba(200, 16, 46, 0.5) !important;
+    transform: translateY(-1px);
 }
 
 .aot-card-viewer .random-button:active,
@@ -367,9 +416,15 @@ body {
 }
 
 .aot-card-viewer .arrow-button {
-    background: #8B0000 !important;
-    border: 2px solid #FF6B6B !important;
-    box-shadow: 0 2px 8px rgba(139, 0, 0, 0.4) !important;
+    background: #C8102E !important;
+    border: 2px solid #FF4757 !important;
+    box-shadow: 0 2px 10px rgba(200, 16, 46, 0.4) !important;
+    transition: all 0.2s ease !important;
+}
+
+.aot-card-viewer .arrow-button:hover:not(:disabled) {
+    background: #FF4757 !important;
+    transform: scale(1.05);
 }
 
 .aot-card-viewer .arrow-button:active:not(:disabled) {
@@ -380,43 +435,53 @@ body {
 .aot-card-viewer #deck-name-header {
     color: #FFD700 !important;
     text-shadow: 
-        0 0 15px rgba(255, 215, 0, 0.9),
-        0 0 30px rgba(255, 215, 0, 0.6),
+        0 0 12px rgba(255, 215, 0, 0.8),
+        0 0 24px rgba(255, 215, 0, 0.5),
         0 2px 4px rgba(0, 0, 0, 0.8),
-        2px 2px 0 rgba(139, 0, 0, 0.9) !important;
+        1px 1px 0 rgba(200, 16, 46, 0.8) !important;
     font-family: 'Noto Sans JP', sans-serif !important;
-    font-weight: 900 !important;
-    letter-spacing: 1px;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
 }
 
 .add-deck-card {
-    background: transparent;
-    border: 2px dashed rgba(46, 134, 171, 0.6);
-    border-radius: 24px;
-    padding: 24px 16px;
+    background: var(--card-bg);
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    padding: 20px 16px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
-    min-height: 200px;
+    transition: all 0.2s ease;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
+.add-deck-card:hover {
+    border-color: var(--accent);
+    background: rgba(51, 144, 236, 0.05);
+    transform: translateY(-2px);
+}
+
 .add-deck-card:active {
-    transform: scale(0.97);
-    border-color: var(--sea);
+    transform: translateY(0) scale(0.98);
 }
 
 .add-deck-icon {
-    font-size: 32px;
-    color: var(--sea);
-    margin-bottom: 12px;
+    font-size: 36px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    transition: transform 0.2s;
+}
+
+.add-deck-card:hover .add-deck-icon {
+    transform: scale(1.1);
 }
 
 .add-deck-text {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     margin-bottom: 4px;
@@ -473,7 +538,9 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(139, 0, 0, 0.05);
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(200, 16, 46, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 0, 0, 0.08) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
 }
@@ -642,17 +709,19 @@ body {
 .aot-quiz .card-front,
 .aot-quiz .card-back {
     background: #0A0A0F !important;
-    border: 3px solid #8B0000 !important;
-    box-shadow: 0 8px 24px rgba(139, 0, 0, 0.5) !important;
+    border: 3px solid #C8102E !important;
+    box-shadow: 
+        0 8px 32px rgba(200, 16, 46, 0.5),
+        inset 0 0 40px rgba(200, 16, 46, 0.15) !important;
 }
 
 .aot-quiz .card-text {
     color: #FFD700 !important;
     text-shadow: 
-        0 0 20px rgba(255, 215, 0, 1),
-        0 0 40px rgba(255, 215, 0, 0.7),
-        0 2px 8px rgba(0, 0, 0, 0.9),
-        3px 3px 0 rgba(139, 0, 0, 1) !important;
+        0 0 12px rgba(255, 215, 0, 0.9),
+        0 0 24px rgba(255, 215, 0, 0.6),
+        0 2px 6px rgba(0, 0, 0, 0.9),
+        1px 1px 0 rgba(200, 16, 46, 0.9) !important;
 }
 
 /* Атака титанов (Разговорные) - более светлый, дружественный стиль */
