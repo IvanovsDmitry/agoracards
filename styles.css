@@ -769,6 +769,71 @@ body {
     overflow-y: auto;
 }
 
+/* Новая структура обратной стороны карты - две равные части для остальных колод */
+.card-back-split {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    justify-content: flex-start;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.card-back-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.card-back-top {
+    border-bottom: none;
+}
+
+.card-back-bottom {
+    border-top: none;
+}
+
+.card-back-divider {
+    flex-shrink: 0;
+    height: 4px;
+    background: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.7) 0px,
+        rgba(255, 255, 255, 0.7) 12px,
+        transparent 12px,
+        transparent 24px
+    );
+    margin: 0 20px;
+    border: none;
+}
+
+.card-back-half .card-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    padding: 0 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+/* Старая структура для специальных колод */
+.card-back-simple {
+    position: relative;
+    z-index: 2;
+}
+
 /* Разные стили для двух колод AOT */
 
 /* Атака титанов (Квиз) - темный, мистический стиль с подсказками */

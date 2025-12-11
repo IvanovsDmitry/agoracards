@@ -87,19 +87,40 @@
                         <div class="card-background" id="card-back-bg"></div>
                         <div class="card-overlay"></div>
                         <div class="card-content">
-                            <p class="card-text" id="additional-question"></p>
-                        <div class="quiz-answer" id="quiz-answer" style="display: none;">
-                            <div class="quiz-label">Правильный ответ:</div>
-                            <div class="quiz-text" id="quiz-text"></div>
-                        </div>
-                        <div class="alternatives-divider" id="alternatives-divider" style="display: none;">–––</div>
-                        <div class="alternatives-block" id="alternatives-block" style="display: none;">
-                            <div class="alternatives-text" id="alternatives-text"></div>
-                        </div>
-                        <div id="eternity-hint-block" style="display: none;">
-                            <p class="hint-text" id="hint-text"></p>
-                            <p class="clarifying-question" id="clarifying-question"></p>
-                        </div>
+                            <!-- Новая структура для остальных колод: две части -->
+                            <div class="card-back-split" id="card-back-split" style="display: none;">
+                                <!-- Верхняя часть - основной вопрос -->
+                                <div class="card-back-half card-back-top">
+                                    <p class="card-text" id="main-question-back"></p>
+                                </div>
+                                
+                                <!-- Разделитель -->
+                                <div class="card-back-divider"></div>
+                                
+                                <!-- Нижняя часть - дополнительный вопрос -->
+                                <div class="card-back-half card-back-bottom">
+                                    <p class="card-text" id="additional-question-back"></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Старая структура для специальных колод -->
+                            <div class="card-back-simple" id="card-back-simple">
+                                <p class="card-text" id="additional-question"></p>
+                            </div>
+                            
+                            <!-- Специальные блоки -->
+                            <div class="quiz-answer" id="quiz-answer" style="display: none;">
+                                <div class="quiz-label">Правильный ответ:</div>
+                                <div class="quiz-text" id="quiz-text"></div>
+                            </div>
+                            <div class="alternatives-divider" id="alternatives-divider" style="display: none;">–––</div>
+                            <div class="alternatives-block" id="alternatives-block" style="display: none;">
+                                <div class="alternatives-text" id="alternatives-text"></div>
+                            </div>
+                            <div id="eternity-hint-block" style="display: none;">
+                                <p class="hint-text" id="hint-text"></p>
+                                <p class="clarifying-question" id="clarifying-question"></p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -167,8 +167,16 @@ function updateCardViewer() {
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
     
+    // Скрываем новую структуру для специальных колод
+    const cardBackSplit = document.getElementById('card-back-split');
+    const cardBackSimple = document.getElementById('card-back-simple');
+    
     if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
-        // Для колоды "Вопросы вечности" парсим подсказку и уточняющий вопрос
+        // Для специальных колод показываем старую структуру
+        if (cardBackSplit) cardBackSplit.style.display = 'none';
+        if (cardBackSimple) cardBackSimple.style.display = 'block';
+        
+        // Для колоды "Вопросы вечности" и "Атака титанов" парсим подсказку и уточняющий вопрос
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
         
@@ -196,35 +204,59 @@ function updateCardViewer() {
                 const hintWithoutQuote = hintWithQuote.replace(/«[^»]*»\s*/g, '').trim();
                 
                 // Порядок отображения: подсказка (курсив) → пропуск → уточняющий вопрос (обычный)
-                document.getElementById('additional-question').textContent = ''; // Очищаем основной текст
+                const additionalQuestionEl = document.getElementById('additional-question');
+                if (additionalQuestionEl) {
+                    additionalQuestionEl.textContent = '';
+                }
                 document.getElementById('hint-text').textContent = hintWithoutQuote;
                 document.getElementById('clarifying-question').textContent = clarifyingQuestion;
                 eternityHintBlock.style.display = 'block';
             } else {
                 // Если формат не найден, показываем как обычно
-                document.getElementById('additional-question').textContent = card.additionalQuestion;
+                const additionalQuestionEl = document.getElementById('additional-question');
+                if (additionalQuestionEl) {
+                    additionalQuestionEl.textContent = card.additionalQuestion;
+                }
                 eternityHintBlock.style.display = 'none';
             }
         } else {
-            document.getElementById('additional-question').textContent = '';
+            const additionalQuestionEl = document.getElementById('additional-question');
+            if (additionalQuestionEl) {
+                additionalQuestionEl.textContent = '';
+            }
             eternityHintBlock.style.display = 'none';
         }
     } else {
-        // Для остальных колод - обычная логика
+        // Для остальных колод - новая структура с двумя вопросами
         eternityHintBlock.style.display = 'none';
         const quizAnswer = document.getElementById('quiz-answer');
         quizAnswer.style.display = 'none';
         
-        document.getElementById('additional-question').textContent = card.additionalQuestion;
+        // Показываем новую структуру (две части)
+        const cardBackSplit = document.getElementById('card-back-split');
+        const cardBackSimple = document.getElementById('card-back-simple');
         
-        // Отобразить блок "или то, или то", если есть
+        if (cardBackSplit && cardBackSimple) {
+            cardBackSplit.style.display = 'flex';
+            cardBackSimple.style.display = 'none';
+            
+            // Основной вопрос (верхняя часть)
+            const mainQuestionBack = document.getElementById('main-question-back');
+            if (mainQuestionBack) {
+                mainQuestionBack.textContent = card.mainQuestion;
+            }
+            
+            // Дополнительный вопрос (нижняя часть)
+            const additionalQuestionBack = document.getElementById('additional-question-back');
+            if (additionalQuestionBack) {
+                additionalQuestionBack.textContent = card.additionalQuestion || '';
+            }
+        }
+        
+        // Отобразить блок "или то, или то", если есть (скрываем, так как используем новую структуру)
         const alternativesText = document.getElementById('alternatives-text');
         const alternativesDivider = document.getElementById('alternatives-divider');
-        if (card.alternatives) {
-            alternativesText.textContent = card.alternatives;
-            alternativesBlock.style.display = 'block';
-            alternativesDivider.style.display = 'block';
-        } else {
+        if (alternativesText && alternativesDivider) {
             alternativesBlock.style.display = 'none';
             alternativesDivider.style.display = 'none';
         }
