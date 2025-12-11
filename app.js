@@ -248,16 +248,20 @@ function updateCardViewer() {
             cardBackSplit.style.display = 'flex';
             cardBackSimple.style.display = 'none';
             
-            // Основной вопрос (верхняя часть)
-            const mainQuestionBack = document.getElementById('main-question-back');
-            if (mainQuestionBack) {
-                mainQuestionBack.textContent = card.mainQuestion;
-            }
-            
-            // Дополнительный вопрос (нижняя часть)
+            // Дополнительный вопрос (верхняя часть)
             const additionalQuestionBack = document.getElementById('additional-question-back');
             if (additionalQuestionBack) {
                 additionalQuestionBack.textContent = card.additionalQuestion || '';
+            }
+            
+            // Подсказка (нижняя часть) - используем alternatives
+            const mainQuestionBack = document.getElementById('main-question-back');
+            if (mainQuestionBack) {
+                if (card.alternatives) {
+                    mainQuestionBack.textContent = card.alternatives;
+                } else {
+                    mainQuestionBack.textContent = ''; // Пусто, если нет подсказки
+                }
             }
         }
         
