@@ -5,7 +5,7 @@ class DeckManager {
         this.decks = [];
         this.decksKey = 'saved_decks';
         this.builtInDecksVersionKey = 'built_in_decks_version';
-        this.currentBuiltInDecksVersion = 4; // Версия 4: переименования колод (Компания друзей → Компания людей, и т.д.)
+        this.currentBuiltInDecksVersion = 5; // Версия 5: обновление кэша для колоды "Атака титанов"
         
         // Маппинг старых названий колод на новые
         this.oldDeckNames = [
