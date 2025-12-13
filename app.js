@@ -201,15 +201,31 @@ function updateCardViewer() {
                 // Всё до последней части - это подсказка с цитатой
                 const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
                 
-                // Извлекаем цитату (между « и »)
-                const quoteMatch = hintWithQuote.match(/«([^»]*)»/);
-                const quote = quoteMatch ? quoteMatch[1] : '';
+                // Извлекаем цитату с автором (формат: «Цитата» — Автор)
+                const quoteMatch = hintWithQuote.match(/«([^»]*)»\s*—\s*(.+?)(?:\n|$)/);
+                let quoteText = '';
+                let quoteAuthor = '';
                 
-                // Верхняя часть: цитата
+                if (quoteMatch) {
+                    quoteText = quoteMatch[1].trim();
+                    quoteAuthor = quoteMatch[2].trim();
+                } else {
+                    // Если формат без автора, извлекаем только цитату
+                    const simpleQuoteMatch = hintWithQuote.match(/«([^»]*)»/);
+                    if (simpleQuoteMatch) {
+                        quoteText = simpleQuoteMatch[1].trim();
+                    }
+                }
+                
+                // Верхняя часть: цитата с автором
                 const mainQuestionBack = document.getElementById('main-question-back');
                 if (mainQuestionBack) {
-                    if (quote) {
-                        mainQuestionBack.textContent = '«' + quote + '»';
+                    if (quoteText) {
+                        let fullQuote = '«' + quoteText + '»';
+                        if (quoteAuthor) {
+                            fullQuote += '\n— ' + quoteAuthor;
+                        }
+                        mainQuestionBack.textContent = fullQuote;
                         mainQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
                     } else {
                         mainQuestionBack.textContent = '';
