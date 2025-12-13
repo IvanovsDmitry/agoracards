@@ -828,6 +828,20 @@ body {
     width: 100%;
 }
 
+/* Специальные стили для цитаты в колодах "Вечность" и "Атака" */
+.special-deck-back .card-back-top .quote-text {
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 16px 12px;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Старая структура для специальных колод */
 .card-back-simple {
     position: relative;

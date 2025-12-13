@@ -173,7 +173,10 @@ function updateCardViewer() {
     
     if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
         // Для специальных колод используем новую структуру с двумя частями
-        if (cardBackSplit) cardBackSplit.style.display = 'flex';
+        if (cardBackSplit) {
+            cardBackSplit.style.display = 'flex';
+            cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
+        }
         if (cardBackSimple) cardBackSimple.style.display = 'none';
         alternativesBlock.style.display = 'none';
         eternityHintBlock.style.display = 'none';
@@ -207,8 +210,10 @@ function updateCardViewer() {
                 if (mainQuestionBack) {
                     if (quote) {
                         mainQuestionBack.textContent = '«' + quote + '»';
+                        mainQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
                     } else {
                         mainQuestionBack.textContent = '';
+                        mainQuestionBack.classList.remove('quote-text');
                     }
                 }
                 
@@ -246,6 +251,7 @@ function updateCardViewer() {
         
         if (cardBackSplit && cardBackSimple) {
             cardBackSplit.style.display = 'flex';
+            cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
             cardBackSimple.style.display = 'none';
             
             // Дополнительный вопрос (верхняя часть)
@@ -257,6 +263,7 @@ function updateCardViewer() {
             // Подсказка (нижняя часть) - используем alternatives
             const mainQuestionBack = document.getElementById('main-question-back');
             if (mainQuestionBack) {
+                mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты для обычных колод
                 if (card.alternatives) {
                     mainQuestionBack.textContent = card.alternatives;
                 } else {
