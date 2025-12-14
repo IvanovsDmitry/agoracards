@@ -129,6 +129,12 @@ function openDeck(deckId) {
     currentCardIndex = 0;
     isCardFlipped = false;
     
+    // Убеждаемся, что карта не перевернута
+    const flipCardElement = document.getElementById('flip-card');
+    if (flipCardElement) {
+        flipCardElement.classList.remove('flipped');
+    }
+    
     // Отслеживаем открытие колоды
     if (analytics) {
         analytics.trackDeckOpen(deck.name);
@@ -162,6 +168,20 @@ function updateCardViewer() {
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
     document.getElementById('main-question').textContent = card.mainQuestion;
+    
+    // Для колоды "36 вопросов для незнакомцев" скрываем кнопку "Разговорить глубже"
+    const randomButton = document.getElementById('random-button');
+    if (currentDeck.name === "36 вопросов для незнакомцев") {
+        if (randomButton) randomButton.style.display = 'none';
+        // Убеждаемся, что карта не перевернута
+        const flipCardElement = document.getElementById('flip-card');
+        if (flipCardElement) {
+            flipCardElement.classList.remove('flipped');
+            isCardFlipped = false;
+        }
+    } else {
+        if (randomButton) randomButton.style.display = '';
+    }
     
     // Специальная обработка для колоды "Вопросы вечности"
     const eternityHintBlock = document.getElementById('eternity-hint-block');
@@ -435,6 +455,11 @@ function showNextCard() {
 
 // Перевернуть карту
 function flipCard() {
+    // Для колоды "36 вопросов для незнакомцев" не переворачиваем карту
+    if (currentDeck && currentDeck.name === "36 вопросов для незнакомцев") {
+        return;
+    }
+    
     const flipCardElement = document.getElementById('flip-card');
     isCardFlipped = !isCardFlipped;
     
@@ -475,6 +500,10 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
+            return;
+        }
+        // Для колоды "36 вопросов для незнакомцев" не переворачиваем карту
+        if (currentDeck && currentDeck.name === "36 вопросов для незнакомцев") {
             return;
         }
         flipCard();
