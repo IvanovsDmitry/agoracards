@@ -217,26 +217,27 @@ function updateCardViewer() {
                     }
                 }
                 
-                // Верхняя часть: цитата с автором
+                // Верхняя часть: дополнительный вопрос
                 const mainQuestionBack = document.getElementById('main-question-back');
                 if (mainQuestionBack) {
+                    mainQuestionBack.textContent = clarifyingQuestion;
+                    mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты
+                }
+                
+                // Нижняя часть: цитата с автором
+                const additionalQuestionBack = document.getElementById('additional-question-back');
+                if (additionalQuestionBack) {
                     if (quoteText) {
                         let fullQuote = '«' + quoteText + '»';
                         if (quoteAuthor) {
                             fullQuote += '\n— ' + quoteAuthor;
                         }
-                        mainQuestionBack.textContent = fullQuote;
-                        mainQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
+                        additionalQuestionBack.textContent = fullQuote;
+                        additionalQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
                     } else {
-                        mainQuestionBack.textContent = '';
-                        mainQuestionBack.classList.remove('quote-text');
+                        additionalQuestionBack.textContent = '';
+                        additionalQuestionBack.classList.remove('quote-text');
                     }
-                }
-                
-                // Нижняя часть: дополнительный вопрос
-                const additionalQuestionBack = document.getElementById('additional-question-back');
-                if (additionalQuestionBack) {
-                    additionalQuestionBack.textContent = clarifyingQuestion;
                 }
             } else {
                 // Если формат не найден, показываем как обычно
@@ -273,7 +274,8 @@ function updateCardViewer() {
             // Дополнительный вопрос (верхняя часть)
             const additionalQuestionBack = document.getElementById('additional-question-back');
             if (additionalQuestionBack) {
-                additionalQuestionBack.textContent = card.additionalQuestion || '';
+                // Если нет дополнительного вопроса, показываем основной вопрос
+                additionalQuestionBack.textContent = card.additionalQuestion || card.mainQuestion || '';
             }
             
             // Подсказка (нижняя часть) - используем alternatives

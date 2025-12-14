@@ -829,12 +829,12 @@ body {
 }
 
 /* Специальные стили для цитаты в колодах "Вечность" и "Атака" */
-.special-deck-back .card-back-top .quote-text {
-    font-size: 16px;
+.special-deck-back .card-back-bottom .quote-text {
+    font-size: 13px;
     font-style: italic;
     font-weight: 500;
-    line-height: 1.5;
-    padding: 16px 12px;
+    line-height: 1.35;
+    padding: 10px 8px;
     max-height: 100%;
     overflow: hidden;
     display: flex;
@@ -843,6 +843,15 @@ body {
     justify-content: center;
     white-space: pre-line;
     text-align: center;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Уменьшаем отступы для половинок карты в специальных колодах */
+.special-deck-back .card-back-half {
+    padding: 16px 14px;
 }
 
 /* Старая структура для специальных колод */

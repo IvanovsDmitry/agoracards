@@ -5,7 +5,7 @@ class DeckManager {
         this.decks = [];
         this.decksKey = 'saved_decks';
         this.builtInDecksVersionKey = 'built_in_decks_version';
-        this.currentBuiltInDecksVersion = 5; // Версия 5: обновление кэша для колоды "Атака титанов"
+        this.currentBuiltInDecksVersion = 6; // Версия 6: добавлена колода "36 вопросов для незнакомцев"
         
         // Маппинг старых названий колод на новые
         this.oldDeckNames = [
