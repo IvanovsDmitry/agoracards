@@ -392,6 +392,7 @@ function updateCardViewer() {
     
     // Управление кнопкой переворота в зависимости от типа колоды
     const randomButton = document.getElementById('random-button');
+    const flipButton = document.getElementById('flip-button');
     const flipType = getDeckFlipType(currentDeck.name);
     
     if (flipType === 'NO_FLIP') {
@@ -401,6 +402,15 @@ function updateCardViewer() {
         // Показываем кнопку переворота для колод с оборотом
         if (randomButton) randomButton.style.display = 'block';
         updateFlipButton();
+    }
+    
+    // Делаем кнопку "Пусть судьба выберет" неактивной только на вводных картах колоды "Большая семья"
+    if (flipButton) {
+        if (isIntroCard) {
+            flipButton.disabled = true;
+        } else {
+            flipButton.disabled = false;
+        }
     }
     
     // Обновить цвет карты
