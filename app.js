@@ -175,23 +175,25 @@ function updateCardViewer() {
         const cardBackSimple = document.getElementById('card-back-simple');
         if (cardBackSplit) cardBackSplit.style.display = 'none';
         if (cardBackSimple) cardBackSimple.style.display = 'none';
+        // Пропускаем остальную обработку для вводных карт
+        // Обновляем только кнопки и цвет
     } else {
         // Обычная карта
         mainQuestionEl.textContent = card.mainQuestion;
         cardFront.classList.remove('intro-card');
     }
     
-    // Для вводных карт "Большая семья" пропускаем остальную обработку
+    // Для вводных карт пропускаем обработку других колод
     if (!isIntroCard) {
-        // Специальная обработка для колоды "Вопросы вечности"
-        const eternityHintBlock = document.getElementById('eternity-hint-block');
-        const alternativesBlock = document.getElementById('alternatives-block');
-        
-        // Скрываем новую структуру для специальных колод
-        const cardBackSplit = document.getElementById('card-back-split');
-        const cardBackSimple = document.getElementById('card-back-simple');
-        
-        if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
+    // Специальная обработка для колоды "Вопросы вечности"
+    const eternityHintBlock = document.getElementById('eternity-hint-block');
+    const alternativesBlock = document.getElementById('alternatives-block');
+    
+    // Скрываем новую структуру для специальных колод
+    const cardBackSplit = document.getElementById('card-back-split');
+    const cardBackSimple = document.getElementById('card-back-simple');
+    
+    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
         // Для специальных колод используем новую структуру с двумя частями
         if (cardBackSplit) {
             cardBackSplit.style.display = 'flex';
@@ -318,7 +320,7 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
-    } // Конец условия !isIntroCard
+    } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
@@ -352,13 +354,9 @@ function updateCardViewer() {
     
     // Скрыть кнопку "Разговорить глубже" для колод "36 вопросов для незнакомцев" и "Большая семья"
     // Кнопка "Пусть судьба выберет" остается видимой для всех колод
-    // Для вводных карт "Большая семья" также скрываем кнопку переворота
     const randomButton = document.getElementById('random-button');
     const flipButton = document.getElementById('flip-button');
-    const isFamilyDeck = currentDeck.name === 'Большая семья';
-    const isIntroCardFamily = isFamilyDeck && isIntroCard;
-    
-    if (currentDeck.name === '36 вопросов для незнакомцев' || isFamilyDeck) {
+    if (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев') {
         // Скрываем только кнопку "Разговорить глубже" (переворот карты)
         if (randomButton) randomButton.style.display = 'none';
         // Кнопка "Пусть судьба выберет" остается видимой
@@ -549,13 +547,7 @@ function setupSwipeHandlers() {
             return;
         }
         // Не переворачиваем карту для колод "36 вопросов для незнакомцев" и "Большая семья"
-        // Также не переворачиваем вводные карты "Большая семья"
-        const isFamilyDeck = currentDeck && currentDeck.name === 'Большая семья';
-        const isIntroCardFamily = isFamilyDeck && currentDeck.cards[currentCardIndex] && 
-            currentDeck.cards[currentCardIndex].mainQuestion && 
-            currentDeck.cards[currentCardIndex].mainQuestion.startsWith('INTRO_CARD_');
-        
-        if (currentDeck && (currentDeck.name === '36 вопросов для незнакомцев' || isFamilyDeck || isIntroCardFamily)) {
+        if (currentDeck && (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев')) {
             return;
         }
         flipCard();
