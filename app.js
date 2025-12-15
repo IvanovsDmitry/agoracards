@@ -28,34 +28,8 @@ function initTelegramWebApp() {
     }
 }
 
-// Очистка кэша при обновлении версии
-const APP_VERSION = '2.0';
-const VERSION_KEY = 'app_version';
-
-function clearCacheIfNeeded() {
-    const savedVersion = localStorage.getItem(VERSION_KEY);
-    if (savedVersion !== APP_VERSION) {
-        // Очищаем кэш браузера для статических файлов
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                names.forEach(name => {
-                    caches.delete(name);
-                });
-            });
-        }
-        // Очищаем localStorage для колод (они будут перезагружены)
-        localStorage.removeItem('saved_decks');
-        localStorage.setItem(VERSION_KEY, APP_VERSION);
-        // Принудительная перезагрузка страницы при первом запуске новой версии
-        if (savedVersion && savedVersion !== APP_VERSION) {
-            window.location.reload(true);
-        }
-    }
-}
-
 // Инициализация приложения
 function initApp() {
-    clearCacheIfNeeded();
     initTelegramWebApp();
     deckManager = new DeckManager();
     showDeckList();
@@ -69,10 +43,11 @@ function initApp() {
     });
     
     // Обработчики карт
-    document.getElementById('random-button').addEventListener('click', showRandomCard);
+    // Поменяли местами функции: random-button теперь переворачивает, flip-button показывает случайную
+    document.getElementById('random-button').addEventListener('click', flipCard);
     document.getElementById('prev-button').addEventListener('click', showPreviousCard);
     document.getElementById('next-button').addEventListener('click', showNextCard);
-    document.getElementById('flip-button').addEventListener('click', flipCard);
+    document.getElementById('flip-button').addEventListener('click', showRandomCard);
     
     // Обработчик свайпов
     setupSwipeHandlers();
@@ -83,6 +58,12 @@ function showDeckList() {
     document.getElementById('deck-list-screen').classList.add('active');
     document.getElementById('card-viewer-screen').classList.remove('active');
     document.getElementById('edit-deck-screen').classList.remove('active');
+    
+    // Отслеживаем возврат на главный экран
+    if (analytics) {
+        analytics.trackScreenView('deck_list');
+    }
+    
     renderDecks();
 }
 
@@ -104,7 +85,9 @@ function renderDecks() {
 // Создать карточку колоды
 function createDeckCard(deck) {
     const card = document.createElement('div');
-    card.className = 'deck-card';
+    // Специальный класс для колоды "Атака титанов"
+    const deckClass = deck.name === "Атака титанов" ? "deck-card aot-deck" : "deck-card";
+    card.className = deckClass;
     card.innerHTML = `
         <div class="deck-emoji">${deck.emoji}</div>
         <div class="deck-name">${deck.name}</div>
@@ -146,8 +129,22 @@ function openDeck(deckId) {
     currentCardIndex = 0;
     isCardFlipped = false;
     
+    // Отслеживаем открытие колоды
+    if (analytics) {
+        analytics.trackDeckOpen(deck.name);
+        analytics.trackScreenView(`deck_${deck.name}`);
+    }
+    
     document.getElementById('deck-list-screen').classList.remove('active');
-    document.getElementById('card-viewer-screen').classList.add('active');
+    const cardViewerScreen = document.getElementById('card-viewer-screen');
+    cardViewerScreen.classList.add('active');
+    
+    // Добавляем специальный класс для AOT колоды
+    if (deck.name === "Атака титанов") {
+        cardViewerScreen.classList.add('aot-card-viewer');
+    } else {
+        cardViewerScreen.classList.remove('aot-card-viewer');
+    }
     
     updateCardViewer();
 }
@@ -165,16 +162,141 @@ function updateCardViewer() {
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
     document.getElementById('main-question').textContent = card.mainQuestion;
-    document.getElementById('additional-question').textContent = card.additionalQuestion;
     
-    // Отобразить блок "или то, или то", если есть
+    // Специальная обработка для колоды "Вопросы вечности"
+    const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
-    const alternativesText = document.getElementById('alternatives-text');
-    if (card.alternatives) {
-        alternativesText.textContent = card.alternatives;
-        alternativesBlock.style.display = 'block';
-    } else {
+    
+    // Скрываем новую структуру для специальных колод
+    const cardBackSplit = document.getElementById('card-back-split');
+    const cardBackSimple = document.getElementById('card-back-simple');
+    
+    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
+        // Для специальных колод используем новую структуру с двумя частями
+        if (cardBackSplit) {
+            cardBackSplit.style.display = 'flex';
+            cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
+        }
+        if (cardBackSimple) cardBackSimple.style.display = 'none';
         alternativesBlock.style.display = 'none';
+        eternityHintBlock.style.display = 'none';
+        
+        if (card.additionalQuestion) {
+            // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
+            const text = card.additionalQuestion;
+            
+            // Ищем подсказку
+            const hintMatch = text.match(/💭 Подсказка:/);
+            if (hintMatch) {
+                const hintIndex = hintMatch.index;
+                // Всё после "💭 Подсказка:"
+                const afterHint = text.substring(hintIndex).replace(/💭 Подсказка:\s*/, '').trim();
+                
+                // Разделяем по двойным переносам строк
+                const parts = afterHint.split(/\n\n+/);
+                
+                // Последняя часть - это уточняющий вопрос
+                const clarifyingQuestion = parts[parts.length - 1].trim();
+                
+                // Всё до последней части - это подсказка с цитатой
+                const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
+                
+                // Извлекаем цитату с автором (формат: «Цитата» — Автор)
+                const quoteMatch = hintWithQuote.match(/«([^»]*)»\s*—\s*(.+?)(?:\n|$)/);
+                let quoteText = '';
+                let quoteAuthor = '';
+                
+                if (quoteMatch) {
+                    quoteText = quoteMatch[1].trim();
+                    quoteAuthor = quoteMatch[2].trim();
+                } else {
+                    // Если формат без автора, извлекаем только цитату
+                    const simpleQuoteMatch = hintWithQuote.match(/«([^»]*)»/);
+                    if (simpleQuoteMatch) {
+                        quoteText = simpleQuoteMatch[1].trim();
+                    }
+                }
+                
+                // Верхняя часть: дополнительный вопрос
+                const mainQuestionBack = document.getElementById('main-question-back');
+                if (mainQuestionBack) {
+                    mainQuestionBack.textContent = clarifyingQuestion;
+                    mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты
+                }
+                
+                // Нижняя часть: цитата с автором
+                const additionalQuestionBack = document.getElementById('additional-question-back');
+                if (additionalQuestionBack) {
+                    if (quoteText) {
+                        let fullQuote = '«' + quoteText + '»';
+                        if (quoteAuthor) {
+                            fullQuote += '\n— ' + quoteAuthor;
+                        }
+                        additionalQuestionBack.textContent = fullQuote;
+                        additionalQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
+                    } else {
+                        additionalQuestionBack.textContent = '';
+                        additionalQuestionBack.classList.remove('quote-text');
+                    }
+                }
+            } else {
+                // Если формат не найден, показываем как обычно
+                if (cardBackSplit) cardBackSplit.style.display = 'none';
+                if (cardBackSimple) cardBackSimple.style.display = 'block';
+                const additionalQuestionEl = document.getElementById('additional-question');
+                if (additionalQuestionEl) {
+                    additionalQuestionEl.textContent = card.additionalQuestion;
+                }
+            }
+        } else {
+            if (cardBackSplit) cardBackSplit.style.display = 'none';
+            if (cardBackSimple) cardBackSimple.style.display = 'block';
+            const additionalQuestionEl = document.getElementById('additional-question');
+            if (additionalQuestionEl) {
+                additionalQuestionEl.textContent = '';
+            }
+        }
+    } else {
+        // Для остальных колод - новая структура с двумя вопросами
+        eternityHintBlock.style.display = 'none';
+        const quizAnswer = document.getElementById('quiz-answer');
+        quizAnswer.style.display = 'none';
+        
+        // Показываем новую структуру (две части)
+        const cardBackSplit = document.getElementById('card-back-split');
+        const cardBackSimple = document.getElementById('card-back-simple');
+        
+        if (cardBackSplit && cardBackSimple) {
+            cardBackSplit.style.display = 'flex';
+            cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
+            cardBackSimple.style.display = 'none';
+            
+            // Дополнительный вопрос (верхняя часть)
+            const additionalQuestionBack = document.getElementById('additional-question-back');
+            if (additionalQuestionBack) {
+                // Если нет дополнительного вопроса, показываем основной вопрос
+                additionalQuestionBack.textContent = card.additionalQuestion || card.mainQuestion || '';
+            }
+            
+            // Подсказка (нижняя часть) - используем alternatives
+            const mainQuestionBack = document.getElementById('main-question-back');
+            if (mainQuestionBack) {
+                mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты для обычных колод
+                if (card.alternatives) {
+                    mainQuestionBack.textContent = card.alternatives;
+                } else {
+                    mainQuestionBack.textContent = ''; // Пусто, если нет подсказки
+                }
+            }
+        }
+        
+        // Отобразить блок "или то, или то", если есть (скрываем, так как используем новую структуру)
+        const alternativesText = document.getElementById('alternatives-text');
+        const alternativesDivider = document.getElementById('alternatives-divider');
+        if (alternativesText && alternativesDivider) {
+            alternativesBlock.style.display = 'none';
+            alternativesDivider.style.display = 'none';
+        }
     }
     
     // Обновить состояние кнопок
@@ -189,11 +311,11 @@ function updateCardViewer() {
     isCardFlipped = false;
     
     // Скрыть кнопку переворота для колоды "Большая семья"
-    const flipButton = document.getElementById('flip-button');
+    const randomButton = document.getElementById('random-button');
     if (currentDeck.name === 'Большая семья') {
-        flipButton.style.display = 'none';
+        if (randomButton) randomButton.style.display = 'none';
     } else {
-        flipButton.style.display = 'block';
+        if (randomButton) randomButton.style.display = 'block';
         updateFlipButton();
     }
     
@@ -201,12 +323,71 @@ function updateCardViewer() {
     updateCardColor();
 }
 
-// Обновить цвет карты
+// Обновить цвет карты и применить иллюстрации
 function updateCardColor() {
-    const colorHex = currentDeck.colorHex;
     const cardFront = document.querySelector('.card-front');
-    if (cardFront) {
-        cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
+    const cardBack = document.querySelector('.card-back');
+    const cardFrontBg = document.getElementById('card-front-bg');
+    const cardBackBg = document.getElementById('card-back-bg');
+    const flipCard = document.getElementById('flip-card');
+    
+    // Убираем все паттерны
+    if (flipCard) {
+        flipCard.classList.remove('deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+            'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5');
+    }
+    
+    // Убираем все классы стилей
+    if (flipCard) {
+        flipCard.classList.remove('aot-card', 'deck-illustration-pattern-1', 'deck-illustration-pattern-2', 
+            'deck-illustration-pattern-3', 'deck-illustration-pattern-4', 'deck-illustration-pattern-5',
+            'deck-friends', 'deck-kids', 'deck-family', 'deck-couples', 'deck-bestfriends', 'deck-eternity');
+    }
+    
+    // Применяем индивидуальные стили для каждой колоды
+    const deckName = currentDeck.name;
+    
+    if (deckName === "Атака титанов") {
+        // Специальный дизайн для "Атака титанов"
+        if (flipCard) flipCard.classList.add('aot-card');
+        if (cardFrontBg) cardFrontBg.style.display = 'none';
+        if (cardBackBg) cardBackBg.style.display = 'none';
+    } else if (deckName === "Компания людей") {
+        if (flipCard) flipCard.classList.add('deck-friends');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Маленькие люди") {
+        if (flipCard) flipCard.classList.add('deck-kids');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Большая семья") {
+        if (flipCard) flipCard.classList.add('deck-family');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Узнать друг друга глубже") {
+        if (flipCard) flipCard.classList.add('deck-couples');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Мой любимый собеседник") {
+        if (flipCard) flipCard.classList.add('deck-bestfriends');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    } else if (deckName === "Вопросы вечности") {
+        if (flipCard) flipCard.classList.add('deck-eternity');
+        if (cardFrontBg) cardFrontBg.style.display = 'block';
+        if (cardBackBg) cardBackBg.style.display = 'block';
+    }
+    
+    // Применяем цвет колоды к картам (если не AOT)
+    if (deckName !== "Атака титанов") {
+        const colorHex = currentDeck.colorHex;
+        if (cardFront) {
+            cardFront.style.background = `linear-gradient(135deg, ${colorHex}E6, ${colorHex}B3, rgba(212, 175, 55, 0.3))`;
+            cardFront.style.border = `2px solid rgba(255, 255, 255, 0.3)`;
+        }
+        if (cardBack) {
+            cardBack.style.border = `2px solid rgba(255, 255, 255, 0.3)`;
+        }
     }
 }
 
@@ -221,6 +402,12 @@ function showRandomCard() {
     
     currentCardIndex = newIndex;
     isCardFlipped = false;
+    
+    // Отслеживаем случайную карту
+    if (analytics) {
+        analytics.trackRandomCard(currentDeck.name);
+    }
+    
     updateCardViewer();
 }
 
@@ -229,6 +416,12 @@ function showPreviousCard() {
     if (currentCardIndex > 0) {
         currentCardIndex--;
         isCardFlipped = false;
+        
+        // Отслеживаем переключение карты
+        if (analytics && currentDeck) {
+            analytics.trackCardChange(currentDeck.name, 'previous');
+        }
+        
         updateCardViewer();
     }
 }
@@ -238,6 +431,12 @@ function showNextCard() {
     if (currentDeck && currentCardIndex < currentDeck.cards.length - 1) {
         currentCardIndex++;
         isCardFlipped = false;
+        
+        // Отслеживаем переключение карты
+        if (analytics && currentDeck) {
+            analytics.trackCardChange(currentDeck.name, 'next');
+        }
+        
         updateCardViewer();
     }
 }
@@ -246,6 +445,11 @@ function showNextCard() {
 function flipCard() {
     const flipCardElement = document.getElementById('flip-card');
     isCardFlipped = !isCardFlipped;
+    
+    // Отслеживаем переворот карты
+    if (analytics && currentDeck) {
+        analytics.trackCardFlip(currentDeck.name);
+    }
     
     if (isCardFlipped) {
         flipCardElement.classList.add('flipped');
@@ -259,7 +463,8 @@ function flipCard() {
 // Обновить текст кнопки flip
 function updateFlipButton() {
     const button = document.getElementById('flip-button');
-    button.textContent = isCardFlipped ? 'Вернуться к началу' : 'Погляди глубже';
+    // Кнопка теперь показывает случайную карту, текст не меняется
+    button.textContent = '✨ Пусть судьба выберет';
 }
 
 // Настройка свайпов

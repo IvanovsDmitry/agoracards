@@ -4,12 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1A1A2E">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>АГОРА — Разговорные карты</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=24">
+    
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105636212', 'ym');
+        
+        ym(105636212, 'init', {
+            ssr:true, 
+            webvisor:true, 
+            clickmap:true, 
+            ecommerce:"dataLayer", 
+            accurateTrackBounce:true, 
+            trackLinks:true,
+            params: {
+                app_type: 'telegram_mini_app'
+            }
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/105636212" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 </head>
 <body>
     <!-- Главный экран: Список колод -->
@@ -56,13 +77,50 @@
             <div class="flip-card" id="flip-card">
                 <div class="flip-card-inner">
                     <div class="card-front" id="card-front">
-                        <p class="card-text" id="main-question"></p>
+                        <div class="card-background" id="card-front-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <p class="card-text" id="main-question"></p>
+                        </div>
                     </div>
                     <div class="card-back" id="card-back">
-                        <p class="card-text" id="additional-question"></p>
-                        <div class="alternatives-block" id="alternatives-block" style="display: none;">
-                            <div class="alternatives-label">или то, или то:</div>
-                            <div class="alternatives-text" id="alternatives-text"></div>
+                        <div class="card-background" id="card-back-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <!-- Новая структура для остальных колод: две части -->
+                            <div class="card-back-split" id="card-back-split" style="display: none;">
+                                <!-- Верхняя часть - основной вопрос -->
+                                <div class="card-back-half card-back-top">
+                                    <p class="card-text" id="main-question-back"></p>
+                                </div>
+                                
+                                <!-- Разделитель -->
+                                <div class="card-back-divider"></div>
+                                
+                                <!-- Нижняя часть - дополнительный вопрос -->
+                                <div class="card-back-half card-back-bottom">
+                                    <p class="card-text" id="additional-question-back"></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Старая структура для специальных колод -->
+                            <div class="card-back-simple" id="card-back-simple">
+                                <p class="card-text" id="additional-question"></p>
+                            </div>
+                            
+                            <!-- Специальные блоки -->
+                            <div class="quiz-answer" id="quiz-answer" style="display: none;">
+                                <div class="quiz-label">Правильный ответ:</div>
+                                <div class="quiz-text" id="quiz-text"></div>
+                            </div>
+                            <div class="alternatives-divider" id="alternatives-divider" style="display: none;">–––</div>
+                            <div class="alternatives-block" id="alternatives-block" style="display: none;">
+                                <div class="alternatives-text" id="alternatives-text"></div>
+                            </div>
+                            <div id="eternity-hint-block" style="display: none;">
+                                <p class="hint-text" id="hint-text"></p>
+                                <p class="clarifying-question" id="clarifying-question"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +129,7 @@
         
         <div class="card-controls">
             <button class="random-button" id="random-button">
-                ✨ Пусть судьба выберет
+                Разговорить глубже
             </button>
             <div class="control-buttons">
                 <button class="arrow-button" id="prev-button">
@@ -80,7 +138,7 @@
                     </svg>
                 </button>
                 <button class="flip-button" id="flip-button">
-                    Погляди глубже
+                    ✨ Пусть судьба выберет
                 </button>
                 <button class="arrow-button" id="next-button">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -103,10 +161,24 @@
         </div>
     </div>
     
-    <script src="models.js?v=3"></script>
-    <script src="data.js?v=3"></script>
-    <script src="deck-manager.js?v=3"></script>
-    <script src="app.js?v=3"></script>
+    <script src="models.js?v=24"></script>
+    <script src="data.js?v=24"></script>
+    <script src="deck-manager.js?v=24"></script>
+    <!-- PlayDeck SDK будет подключен здесь после получения URL из документации -->
+    <!-- <script src="https://playdeck.sdk/..."></script> -->
+    <script src="playdeck-integration.js"></script>
+    <script src="monetization.js"></script>
+    <script src="analytics.js"></script>
+    <script src="app.js?v=24"></script>
+    <script>
+        // Инициализация аналитики после загрузки всех скриптов
+        // Замените YOUR_YANDEX_METRIKA_ID на ваш ID счетчика Яндекс.Метрики
+        // Или оставьте null, если не используете
+        initAnalytics({
+            yandexMetrikaId: 105636212, // ID счетчика Яндекс.Метрики
+            googleAnalyticsId: null // Например: 'G-XXXXXXXXXX'
+        });
+    </script>
 </body>
 </html>
 
