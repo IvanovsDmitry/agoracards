@@ -241,27 +241,27 @@ function renderQuoteAndQuestionBack(card) {
                 }
             }
             
-            // Верхняя часть: цитата с автором
+            // Верхняя часть: уточняющий вопрос
             const mainQuestionBack = document.getElementById('main-question-back');
             if (mainQuestionBack) {
+                mainQuestionBack.textContent = clarifyingQuestion;
+                mainQuestionBack.classList.remove('quote-text');
+            }
+            
+            // Нижняя часть: цитата с автором
+            const additionalQuestionBack = document.getElementById('additional-question-back');
+            if (additionalQuestionBack) {
                 if (quoteText) {
                     let fullQuote = '«' + quoteText + '»';
                     if (quoteAuthor) {
                         fullQuote += '\n— ' + quoteAuthor;
                     }
-                    mainQuestionBack.textContent = fullQuote;
-                    mainQuestionBack.classList.add('quote-text');
+                    additionalQuestionBack.textContent = fullQuote;
+                    additionalQuestionBack.classList.add('quote-text');
                 } else {
-                    mainQuestionBack.textContent = '';
-                    mainQuestionBack.classList.remove('quote-text');
+                    additionalQuestionBack.textContent = '';
+                    additionalQuestionBack.classList.remove('quote-text');
                 }
-            }
-            
-            // Нижняя часть: уточняющий вопрос
-            const additionalQuestionBack = document.getElementById('additional-question-back');
-            if (additionalQuestionBack) {
-                additionalQuestionBack.textContent = clarifyingQuestion;
-                additionalQuestionBack.classList.remove('quote-text');
             }
         } else {
             // Если формат не найден, показываем как обычно

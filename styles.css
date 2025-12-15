@@ -405,6 +405,7 @@ body {
 }
 
 /* Специальные стили для цитаты в колодах "Вечность" и "Атака" */
+/* Цитата теперь в нижней части (card-back-bottom) */
 .special-deck-back .card-back-bottom .quote-text {
     font-size: 13px;
     font-style: italic;
