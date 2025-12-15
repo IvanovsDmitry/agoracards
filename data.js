@@ -225,9 +225,9 @@ const BuiltInDecks = {
         couplesDeck,             // 3. Отношения сделать крепче
         eternityDeck,            // 4. Вопросы вечности
         attackOnTitanQuizDeck,   // 5. Атака Титанов
-        bestFriendsDeck,         // 6. Мой любимый собеседник
-        kidsDeck,                // 7. Маленькие люди
-        familyDeck               // 8. Большая семья (разные поколения)
+        // bestFriendsDeck,      // Скрыта: Мой любимый собеседник
+        kidsDeck,                // 6. Маленькие люди
+        familyDeck               // 7. Большая семья (разные поколения)
     ]
 };
 
