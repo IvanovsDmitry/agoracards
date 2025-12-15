@@ -321,9 +321,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 28px;
+    padding: 0;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
 }
 
 .card-front {
@@ -343,6 +344,73 @@ body {
     line-height: 1.4;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
+}
+
+/* Стили для разделения оборота карты на две части (горизонтальное деление) */
+.card-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-back-split {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 0;
+}
+
+.card-back-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.card-back-top {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-back-bottom {
+    border-top: none;
+}
+
+.card-back-divider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    width: 80%;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+.card-back-split .card-text {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+/* Специальные стили для колод с цитатами (Вопросы вечности, Атака титанов) */
+.card-back-split.special-deck-back .card-back-top .card-text {
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.card-back-split.special-deck-back .card-back-bottom .card-text {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Стили для цитат */
+.quote-text {
+    font-style: italic !important;
+    font-size: 20px !important;
+    line-height: 1.5 !important;
 }
 
 /* Стили для вводных карт колоды "Большая семья" */
