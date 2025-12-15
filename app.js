@@ -29,7 +29,7 @@ function initTelegramWebApp() {
 }
 
 // Очистка кэша при обновлении версии
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.1';
 const VERSION_KEY = 'app_version';
 
 function clearCacheIfNeeded() {
@@ -165,7 +165,12 @@ function updateCardViewer() {
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
     document.getElementById('main-question').textContent = card.mainQuestion;
-    document.getElementById('additional-question').textContent = card.additionalQuestion;
+    // Для колоды "Большая семья" не показываем дополнительный вопрос
+    if (currentDeck.name === 'Большая семья') {
+        document.getElementById('additional-question').textContent = '';
+    } else {
+        document.getElementById('additional-question').textContent = card.additionalQuestion || '';
+    }
     
     // Отобразить блок "или то, или то", если есть
     const alternativesBlock = document.getElementById('alternatives-block');
@@ -187,7 +192,15 @@ function updateCardViewer() {
     const flipCard = document.getElementById('flip-card');
     flipCard.classList.remove('flipped');
     isCardFlipped = false;
-    updateFlipButton();
+    
+    // Скрыть кнопку переворота для колоды "Большая семья"
+    const flipButton = document.getElementById('flip-button');
+    if (currentDeck.name === 'Большая семья') {
+        flipButton.style.display = 'none';
+    } else {
+        flipButton.style.display = 'block';
+        updateFlipButton();
+    }
     
     // Обновить цвет карты
     updateCardColor();
@@ -270,6 +283,10 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
+            return;
+        }
+        // Не переворачиваем карту для колоды "Большая семья"
+        if (currentDeck && currentDeck.name === 'Большая семья') {
             return;
         }
         flipCard();

@@ -5,7 +5,7 @@ class DeckManager {
         this.decks = [];
         this.decksKey = 'saved_decks';
         this.builtInDecksVersionKey = 'built_in_decks_version';
-        this.currentBuiltInDecksVersion = 5; // Версия 5: скрыта колода "Мой любимый собеседник"
+        this.currentBuiltInDecksVersion = 6; // Версия 6: обновлена колода "Большая семья" (новые вопросы, без переворота карт)
         
         // Маппинг старых названий колод на новые
         this.oldDeckNames = [
