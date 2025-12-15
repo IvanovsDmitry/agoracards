@@ -30,12 +30,27 @@ function getDeckFlipType(deckName) {
     return 'QUESTION_AND_HINT'; // По умолчанию
 }
 
+// Версия приложения для управления кэшем
+const APP_VERSION = '25';
+
 let deckManager;
 let currentDeck = null;
 let currentCardIndex = 0;
 let isCardFlipped = false;
 let startX = 0;
 let currentX = 0;
+
+// Очистка кэша при обновлении версии
+function clearCacheIfNeeded() {
+    const savedVersion = localStorage.getItem('app_version');
+    if (savedVersion !== APP_VERSION) {
+        // Сохраняем версию перед перезагрузкой
+        localStorage.setItem('app_version', APP_VERSION);
+        // Перезагружаем страницу для применения изменений
+        window.location.reload();
+        return;
+    }
+}
 
 // Инициализация Telegram WebApp
 function initTelegramWebApp() {
@@ -60,6 +75,9 @@ function initTelegramWebApp() {
 
 // Инициализация приложения
 function initApp() {
+    // Проверяем и очищаем кэш при необходимости
+    clearCacheIfNeeded();
+    
     initTelegramWebApp();
     deckManager = new DeckManager();
     showDeckList();
