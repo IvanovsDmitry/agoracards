@@ -200,8 +200,8 @@ function updateCardViewer() {
                 cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
             }
             if (cardBackSimple) cardBackSimple.style.display = 'none';
-            if (alternativesBlock) alternativesBlock.style.display = 'none';
-            if (eternityHintBlock) eternityHintBlock.style.display = 'none';
+            alternativesBlock.style.display = 'none';
+            eternityHintBlock.style.display = 'none';
             
             if (card.additionalQuestion) {
                 // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
@@ -279,12 +279,15 @@ function updateCardViewer() {
                 }
             }
         } else {
-            // Для остальных колод (включая "Компания людей" и "Маленькие люди") - структура как в коммите 8776eb5
+            // Для остальных колод - новая структура с двумя вопросами (как в коммите 8776eb5)
             if (eternityHintBlock) eternityHintBlock.style.display = 'none';
             const quizAnswer = document.getElementById('quiz-answer');
             if (quizAnswer) quizAnswer.style.display = 'none';
             
             // Показываем новую структуру (две части)
+            const cardBackSplit = document.getElementById('card-back-split');
+            const cardBackSimple = document.getElementById('card-back-simple');
+            
             if (cardBackSplit && cardBackSimple) {
                 cardBackSplit.style.display = 'flex';
                 cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
@@ -313,8 +316,8 @@ function updateCardViewer() {
             const alternativesText = document.getElementById('alternatives-text');
             const alternativesDivider = document.getElementById('alternatives-divider');
             if (alternativesText && alternativesDivider) {
-                if (alternativesBlock) alternativesBlock.style.display = 'none';
-                if (alternativesDivider) alternativesDivider.style.display = 'none';
+                alternativesBlock.style.display = 'none';
+                alternativesDivider.style.display = 'none';
             }
         }
     } // Конец условия !isIntroCard - обработка других колод
