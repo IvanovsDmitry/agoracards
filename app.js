@@ -175,8 +175,9 @@ function updateCardViewer() {
         const cardBackSimple = document.getElementById('card-back-simple');
         if (cardBackSplit) cardBackSplit.style.display = 'none';
         if (cardBackSimple) cardBackSimple.style.display = 'none';
+        // Пропускаем остальную обработку для вводных карт - только обновляем кнопки и цвет
     } else {
-        // Обычная карта
+        // Обычная карта - продолжаем обычную обработку
         mainQuestionEl.textContent = card.mainQuestion;
         cardFront.classList.remove('intro-card');
     }
@@ -200,8 +201,8 @@ function updateCardViewer() {
             cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
         }
         if (cardBackSimple) cardBackSimple.style.display = 'none';
-        if (alternativesBlock) alternativesBlock.style.display = 'none';
-        if (eternityHintBlock) eternityHintBlock.style.display = 'none';
+        alternativesBlock.style.display = 'none';
+        eternityHintBlock.style.display = 'none';
         
         if (card.additionalQuestion) {
             // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
@@ -280,9 +281,9 @@ function updateCardViewer() {
         }
     } else {
         // Для остальных колод - новая структура с двумя вопросами
-        if (eternityHintBlock) eternityHintBlock.style.display = 'none';
+        eternityHintBlock.style.display = 'none';
         const quizAnswer = document.getElementById('quiz-answer');
-        if (quizAnswer) quizAnswer.style.display = 'none';
+        quizAnswer.style.display = 'none';
         
         // Показываем новую структуру (две части)
         const cardBackSplit = document.getElementById('card-back-split');
@@ -333,7 +334,7 @@ function updateCardViewer() {
     flipCard.classList.remove('flipped');
     isCardFlipped = false;
     
-    // Скрыть кнопку переворота для колоды "Большая семья"
+    // Скрыть кнопку переворота для колоды "Большая семья" (включая вводные карты)
     const randomButton = document.getElementById('random-button');
     if (currentDeck.name === 'Большая семья') {
         if (randomButton) randomButton.style.display = 'none';
@@ -506,6 +507,10 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
+            return;
+        }
+        // Не переворачиваем карту для колоды "Большая семья"
+        if (currentDeck && currentDeck.name === 'Большая семья') {
             return;
         }
         flipCard();
