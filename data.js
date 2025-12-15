@@ -91,9 +91,9 @@ const familyDeck = createDeck(
     ]
 );
 
-// Узнать друг друга глубже
+// Отношения сделать крепче
 const couplesDeck = createDeck(
-    "Узнать друг друга глубже",
+    "Отношения сделать крепче",
     "💑",
     "#F38181",
     [
@@ -220,14 +220,14 @@ const strangersDeck = createDeck(
 // Все встроенные колоды
 const BuiltInDecks = {
     allDecks: [
-        friendsDeck,
-        kidsDeck,
-        familyDeck,
-        couplesDeck,
-        bestFriendsDeck,
-        eternityDeck,
-        attackOnTitanQuizDeck,
-        strangersDeck
+        strangersDeck,          // 1. 36 вопросов для незнакомцев
+        friendsDeck,             // 2. Компания людей
+        couplesDeck,             // 3. Отношения сделать крепче
+        eternityDeck,            // 4. Вопросы вечности
+        attackOnTitanQuizDeck,   // 5. Атака Титанов
+        bestFriendsDeck,         // 6. Мой любимый собеседник
+        kidsDeck,                // 7. Маленькие люди
+        familyDeck               // 8. Большая семья (разные поколения)
     ]
 };
 
