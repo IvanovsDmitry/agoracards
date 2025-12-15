@@ -618,6 +618,16 @@ body {
     transform: scale(0.98);
 }
 
+.flip-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.flip-button:active:disabled {
+    transform: none;
+}
+
 /* Модальное окно редактирования */
 .modal {
     position: fixed;
