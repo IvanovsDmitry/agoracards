@@ -185,23 +185,23 @@ function updateCardViewer() {
     if (isIntroCard) {
         // Для вводных карт только обновляем кнопки и цвет, остальное пропускаем
     } else {
-    // Специальная обработка для колоды "Вопросы вечности"
-    const eternityHintBlock = document.getElementById('eternity-hint-block');
-    const alternativesBlock = document.getElementById('alternatives-block');
-    
-    // Скрываем новую структуру для специальных колод
-    const cardBackSplit = document.getElementById('card-back-split');
-    const cardBackSimple = document.getElementById('card-back-simple');
-    
-    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
-        // Для специальных колод используем новую структуру с двумя частями
-        if (cardBackSplit) {
-            cardBackSplit.style.display = 'flex';
-            cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
-        }
-        if (cardBackSimple) cardBackSimple.style.display = 'none';
-        alternativesBlock.style.display = 'none';
-        eternityHintBlock.style.display = 'none';
+        // Специальная обработка для колоды "Вопросы вечности"
+        const eternityHintBlock = document.getElementById('eternity-hint-block');
+        const alternativesBlock = document.getElementById('alternatives-block');
+        
+        // Скрываем новую структуру для специальных колод
+        const cardBackSplit = document.getElementById('card-back-split');
+        const cardBackSimple = document.getElementById('card-back-simple');
+        
+        if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
+            // Для специальных колод используем новую структуру с двумя частями
+            if (cardBackSplit) {
+                cardBackSplit.style.display = 'flex';
+                cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
+            }
+            if (cardBackSimple) cardBackSimple.style.display = 'none';
+            if (alternativesBlock) alternativesBlock.style.display = 'none';
+            if (eternityHintBlock) eternityHintBlock.style.display = 'none';
         
         if (card.additionalQuestion) {
             // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
@@ -278,48 +278,48 @@ function updateCardViewer() {
                 additionalQuestionEl.textContent = '';
             }
         }
-    } else {
-        // Для остальных колод - новая структура с двумя вопросами
-        eternityHintBlock.style.display = 'none';
-        const quizAnswer = document.getElementById('quiz-answer');
-        quizAnswer.style.display = 'none';
-        
-        // Показываем новую структуру (две части)
-        const cardBackSplit = document.getElementById('card-back-split');
-        const cardBackSimple = document.getElementById('card-back-simple');
-        
-        if (cardBackSplit && cardBackSimple) {
-            cardBackSplit.style.display = 'flex';
-            cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
-            cardBackSimple.style.display = 'none';
+        } else {
+            // Для остальных колод - новая структура с двумя вопросами
+            if (eternityHintBlock) eternityHintBlock.style.display = 'none';
+            const quizAnswer = document.getElementById('quiz-answer');
+            if (quizAnswer) quizAnswer.style.display = 'none';
             
-            // Дополнительный вопрос (верхняя часть)
-            const additionalQuestionBack = document.getElementById('additional-question-back');
-            if (additionalQuestionBack) {
-                // Если нет дополнительного вопроса, показываем основной вопрос
-                additionalQuestionBack.textContent = card.additionalQuestion || card.mainQuestion || '';
-            }
+            // Показываем новую структуру (две части)
+            const cardBackSplit = document.getElementById('card-back-split');
+            const cardBackSimple = document.getElementById('card-back-simple');
             
-            // Подсказка (нижняя часть) - используем alternatives
-            const mainQuestionBack = document.getElementById('main-question-back');
-            if (mainQuestionBack) {
-                mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты для обычных колод
-                if (card.alternatives) {
-                    mainQuestionBack.textContent = card.alternatives;
-                } else {
-                    mainQuestionBack.textContent = ''; // Пусто, если нет подсказки
+            if (cardBackSplit && cardBackSimple) {
+                cardBackSplit.style.display = 'flex';
+                cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
+                cardBackSimple.style.display = 'none';
+                
+                // Дополнительный вопрос (верхняя часть)
+                const additionalQuestionBack = document.getElementById('additional-question-back');
+                if (additionalQuestionBack) {
+                    // Если нет дополнительного вопроса, показываем основной вопрос
+                    additionalQuestionBack.textContent = card.additionalQuestion || card.mainQuestion || '';
+                }
+                
+                // Подсказка (нижняя часть) - используем alternatives
+                const mainQuestionBack = document.getElementById('main-question-back');
+                if (mainQuestionBack) {
+                    mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты для обычных колод
+                    if (card.alternatives) {
+                        mainQuestionBack.textContent = card.alternatives;
+                    } else {
+                        mainQuestionBack.textContent = ''; // Пусто, если нет подсказки
+                    }
                 }
             }
+            
+            // Отобразить блок "или то, или то", если есть (скрываем, так как используем новую структуру)
+            const alternativesText = document.getElementById('alternatives-text');
+            const alternativesDivider = document.getElementById('alternatives-divider');
+            if (alternativesText && alternativesDivider) {
+                if (alternativesBlock) alternativesBlock.style.display = 'none';
+                alternativesDivider.style.display = 'none';
+            }
         }
-        
-        // Отобразить блок "или то, или то", если есть (скрываем, так как используем новую структуру)
-        const alternativesText = document.getElementById('alternatives-text');
-        const alternativesDivider = document.getElementById('alternatives-divider');
-        if (alternativesText && alternativesDivider) {
-            alternativesBlock.style.display = 'none';
-            alternativesDivider.style.display = 'none';
-        }
-    }
     } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
