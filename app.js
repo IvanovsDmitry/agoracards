@@ -310,12 +310,15 @@ function updateCardViewer() {
     flipCard.classList.remove('flipped');
     isCardFlipped = false;
     
-    // Скрыть кнопку переворота для колоды "Большая семья"
+    // Скрыть кнопку переворота для колод "36 вопросов для незнакомцев" и "Большая семья"
     const randomButton = document.getElementById('random-button');
-    if (currentDeck.name === 'Большая семья') {
+    const flipButton = document.getElementById('flip-button');
+    if (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев') {
         if (randomButton) randomButton.style.display = 'none';
+        if (flipButton) flipButton.style.display = 'none';
     } else {
         if (randomButton) randomButton.style.display = 'block';
+        if (flipButton) flipButton.style.display = 'block';
         updateFlipButton();
     }
     
@@ -483,6 +486,10 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
+            return;
+        }
+        // Не переворачиваем карту для колод "36 вопросов для незнакомцев" и "Большая семья"
+        if (currentDeck && (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев')) {
             return;
         }
         flipCard();
