@@ -182,7 +182,9 @@ function updateCardViewer() {
     }
     
     // Для вводных карт пропускаем обработку других колод
-    if (!isIntroCard) {
+    if (isIntroCard) {
+        // Для вводных карт только обновляем кнопки и цвет, остальное пропускаем
+    } else {
     // Специальная обработка для колоды "Вопросы вечности"
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
@@ -198,8 +200,8 @@ function updateCardViewer() {
             cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
         }
         if (cardBackSimple) cardBackSimple.style.display = 'none';
-        if (alternativesBlock) alternativesBlock.style.display = 'none';
-        if (eternityHintBlock) eternityHintBlock.style.display = 'none';
+        alternativesBlock.style.display = 'none';
+        eternityHintBlock.style.display = 'none';
         
         if (card.additionalQuestion) {
             // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
@@ -318,50 +320,24 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
-    } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
     const nextButton = document.getElementById('next-button');
     prevButton.disabled = currentCardIndex === 0;
-    
-    // На последней карте меняем кнопку "вправо" на кнопку перехода на первую карту
-    if (currentCardIndex === currentDeck.cards.length - 1) {
-        nextButton.disabled = false;
-        // Меняем иконку на стрелку разворота (круговая стрелка)
-        nextButton.innerHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M12 4V1L8 5L12 9V6C15.31 6 18 8.69 18 12C18 15.31 15.31 18 12 18C8.69 18 6 15.31 6 12H4C4 16.42 7.58 20 12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
-        nextButton.setAttribute('data-action', 'restart');
-    } else {
-        // Обычная стрелка вправо
-        nextButton.innerHTML = `
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        `;
-        nextButton.removeAttribute('data-action');
-    }
+    nextButton.disabled = currentCardIndex === currentDeck.cards.length - 1;
     
     // Сбросить flip состояние
     const flipCard = document.getElementById('flip-card');
     flipCard.classList.remove('flipped');
     isCardFlipped = false;
     
-    // Скрыть кнопку "Разговорить глубже" для колод "36 вопросов для незнакомцев" и "Большая семья"
-    // Кнопка "Пусть судьба выберет" остается видимой для всех колод
+    // Скрыть кнопку переворота для колоды "Большая семья"
     const randomButton = document.getElementById('random-button');
-    const flipButton = document.getElementById('flip-button');
-    if (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев') {
-        // Скрываем только кнопку "Разговорить глубже" (переворот карты)
+    if (currentDeck.name === 'Большая семья') {
         if (randomButton) randomButton.style.display = 'none';
-        // Кнопка "Пусть судьба выберет" остается видимой
-        if (flipButton) flipButton.style.display = 'block';
     } else {
         if (randomButton) randomButton.style.display = 'block';
-        if (flipButton) flipButton.style.display = 'block';
         updateFlipButton();
     }
     
@@ -472,27 +448,14 @@ function showPreviousCard() {
     }
 }
 
-// Показать следующую карту или перейти на первую, если на последней
+// Показать следующую карту
 function showNextCard() {
-    if (!currentDeck) return;
-    
-    // Если на последней карте, переходим на первую
-    if (currentCardIndex === currentDeck.cards.length - 1) {
-        currentCardIndex = 0;
-        isCardFlipped = false;
-        
-        // Отслеживаем переход на первую карту
-        if (analytics) {
-            analytics.trackCardChange(currentDeck.name, 'restart');
-        }
-        
-        updateCardViewer();
-    } else if (currentCardIndex < currentDeck.cards.length - 1) {
+    if (currentDeck && currentCardIndex < currentDeck.cards.length - 1) {
         currentCardIndex++;
         isCardFlipped = false;
         
         // Отслеживаем переключение карты
-        if (analytics) {
+        if (analytics && currentDeck) {
             analytics.trackCardChange(currentDeck.name, 'next');
         }
         
@@ -542,10 +505,6 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
-            return;
-        }
-        // Не переворачиваем карту для колод "36 вопросов для незнакомцев" и "Большая семья"
-        if (currentDeck && (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев')) {
             return;
         }
         flipCard();
