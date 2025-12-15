@@ -1,14 +1,18 @@
 // Основное приложение
 
 // Типы колод по верстке оборота карт
+// ВАЖНО: При изменении верстки редактируйте только соответствующую функцию render*Back()
 const DECK_FLIP_TYPES = {
-    // Тип 1: Колоды с цитатами и уточняющими вопросами (вертикальное деление: цитата + вопрос)
+    // Тип 1: Колоды с цитатами и уточняющими вопросами
+    // Верстка: Верхняя часть - цитата с автором, Нижняя часть - уточняющий вопрос
     QUOTE_AND_QUESTION: ['Вопросы вечности', 'Атака титанов'],
     
-    // Тип 2: Колоды с дополнительным вопросом и подсказкой (вертикальное деление: вопрос + подсказка)
+    // Тип 2: Колоды с дополнительным вопросом и подсказкой
+    // Верстка: Верхняя часть - дополнительный вопрос, Нижняя часть - подсказка (alternatives)
     QUESTION_AND_HINT: ['Компания людей', 'Маленькие люди'],
     
-    // Тип 3: Колоды без оборота карт (нет кнопки переворота, нет клика на карту)
+    // Тип 3: Колоды без оборота карт
+    // Нет кнопки переворота, нет клика на карту для переворота
     NO_FLIP: ['36 вопросов для незнакомцев', 'Большая семья']
 };
 
@@ -219,27 +223,27 @@ function renderQuoteAndQuestionBack(card) {
                 }
             }
             
-            // Верхняя часть: уточняющий вопрос
+            // Верхняя часть: цитата с автором
             const mainQuestionBack = document.getElementById('main-question-back');
             if (mainQuestionBack) {
-                mainQuestionBack.textContent = clarifyingQuestion;
-                mainQuestionBack.classList.remove('quote-text');
-            }
-            
-            // Нижняя часть: цитата с автором
-            const additionalQuestionBack = document.getElementById('additional-question-back');
-            if (additionalQuestionBack) {
                 if (quoteText) {
                     let fullQuote = '«' + quoteText + '»';
                     if (quoteAuthor) {
                         fullQuote += '\n— ' + quoteAuthor;
                     }
-                    additionalQuestionBack.textContent = fullQuote;
-                    additionalQuestionBack.classList.add('quote-text');
+                    mainQuestionBack.textContent = fullQuote;
+                    mainQuestionBack.classList.add('quote-text');
                 } else {
-                    additionalQuestionBack.textContent = '';
-                    additionalQuestionBack.classList.remove('quote-text');
+                    mainQuestionBack.textContent = '';
+                    mainQuestionBack.classList.remove('quote-text');
                 }
+            }
+            
+            // Нижняя часть: уточняющий вопрос
+            const additionalQuestionBack = document.getElementById('additional-question-back');
+            if (additionalQuestionBack) {
+                additionalQuestionBack.textContent = clarifyingQuestion;
+                additionalQuestionBack.classList.remove('quote-text');
             }
         } else {
             // Если формат не найден, показываем как обычно
@@ -260,7 +264,9 @@ function renderQuoteAndQuestionBack(card) {
     }
 }
 
-// Тип 2: Колоды с дополнительным вопросом и подсказкой (вопрос + подсказка)
+// Тип 2: Колоды с дополнительным вопросом и подсказкой
+// Верстка: Верхняя часть (additional-question-back) - дополнительный вопрос или основной вопрос
+//          Нижняя часть (main-question-back) - подсказка (alternatives)
 function renderQuestionAndHintBack(card) {
     const cardBackSplit = document.getElementById('card-back-split');
     const cardBackSimple = document.getElementById('card-back-simple');
@@ -299,7 +305,8 @@ function renderQuestionAndHintBack(card) {
     }
 }
 
-// Тип 3: Колоды без оборота (скрываем все блоки оборота)
+// Тип 3: Колоды без оборота
+// Скрываем все блоки оборота карты (нет кнопки переворота, нет клика на карту)
 function renderNoFlipBack() {
     const cardBackSplit = document.getElementById('card-back-split');
     const cardBackSimple = document.getElementById('card-back-simple');
