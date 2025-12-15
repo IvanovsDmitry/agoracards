@@ -352,9 +352,13 @@ function updateCardViewer() {
     
     // Скрыть кнопку "Разговорить глубже" для колод "36 вопросов для незнакомцев" и "Большая семья"
     // Кнопка "Пусть судьба выберет" остается видимой для всех колод
+    // Для вводных карт "Большая семья" также скрываем кнопку переворота
     const randomButton = document.getElementById('random-button');
     const flipButton = document.getElementById('flip-button');
-    if (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев') {
+    const isFamilyDeck = currentDeck.name === 'Большая семья';
+    const isIntroCardFamily = isFamilyDeck && isIntroCard;
+    
+    if (currentDeck.name === '36 вопросов для незнакомцев' || isFamilyDeck) {
         // Скрываем только кнопку "Разговорить глубже" (переворот карты)
         if (randomButton) randomButton.style.display = 'none';
         // Кнопка "Пусть судьба выберет" остается видимой
@@ -545,7 +549,13 @@ function setupSwipeHandlers() {
             return;
         }
         // Не переворачиваем карту для колод "36 вопросов для незнакомцев" и "Большая семья"
-        if (currentDeck && (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев')) {
+        // Также не переворачиваем вводные карты "Большая семья"
+        const isFamilyDeck = currentDeck && currentDeck.name === 'Большая семья';
+        const isIntroCardFamily = isFamilyDeck && currentDeck.cards[currentCardIndex] && 
+            currentDeck.cards[currentCardIndex].mainQuestion && 
+            currentDeck.cards[currentCardIndex].mainQuestion.startsWith('INTRO_CARD_');
+        
+        if (currentDeck && (currentDeck.name === '36 вопросов для незнакомцев' || isFamilyDeck || isIntroCardFamily)) {
             return;
         }
         flipCard();
