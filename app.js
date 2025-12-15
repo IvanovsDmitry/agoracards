@@ -32,7 +32,7 @@ function getDeckFlipType(deckName) {
 }
 
 // Версия приложения для управления кэшем
-const APP_VERSION = '29';
+const APP_VERSION = '30';
 
 let deckManager;
 let currentDeck = null;
@@ -392,6 +392,7 @@ function updateCardViewer() {
     
     // Управление кнопкой переворота в зависимости от типа колоды
     const randomButton = document.getElementById('random-button');
+    const flipButton = document.getElementById('flip-button');
     const flipType = getDeckFlipType(currentDeck.name);
     
     if (flipType === 'NO_FLIP') {
@@ -401,6 +402,13 @@ function updateCardViewer() {
         // Показываем кнопку переворота для колод с оборотом
         if (randomButton) randomButton.style.display = 'block';
         updateFlipButton();
+    }
+    
+    // Скрываем кнопку "Пусть судьба выберет" для вводных карт
+    if (isIntroCard) {
+        if (flipButton) flipButton.style.display = 'none';
+    } else {
+        if (flipButton) flipButton.style.display = 'flex';
     }
     
     // Обновить цвет карты
