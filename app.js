@@ -181,15 +181,17 @@ function updateCardViewer() {
         cardFront.classList.remove('intro-card');
     }
     
-    // Специальная обработка для колоды "Вопросы вечности"
-    const eternityHintBlock = document.getElementById('eternity-hint-block');
-    const alternativesBlock = document.getElementById('alternatives-block');
-    
-    // Скрываем новую структуру для специальных колод
-    const cardBackSplit = document.getElementById('card-back-split');
-    const cardBackSimple = document.getElementById('card-back-simple');
-    
-    if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
+    // Для вводных карт "Большая семья" пропускаем остальную обработку
+    if (!isIntroCard) {
+        // Специальная обработка для колоды "Вопросы вечности"
+        const eternityHintBlock = document.getElementById('eternity-hint-block');
+        const alternativesBlock = document.getElementById('alternatives-block');
+        
+        // Скрываем новую структуру для специальных колод
+        const cardBackSplit = document.getElementById('card-back-split');
+        const cardBackSimple = document.getElementById('card-back-simple');
+        
+        if (currentDeck.name === "Вопросы вечности" || currentDeck.name === "Атака титанов") {
         // Для специальных колод используем новую структуру с двумя частями
         if (cardBackSplit) {
             cardBackSplit.style.display = 'flex';
@@ -316,6 +318,7 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
+    } // Конец условия !isIntroCard
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
