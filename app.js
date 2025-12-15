@@ -202,82 +202,82 @@ function updateCardViewer() {
             if (cardBackSimple) cardBackSimple.style.display = 'none';
             if (alternativesBlock) alternativesBlock.style.display = 'none';
             if (eternityHintBlock) eternityHintBlock.style.display = 'none';
-        
-        if (card.additionalQuestion) {
-            // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
-            const text = card.additionalQuestion;
             
-            // Ищем подсказку
-            const hintMatch = text.match(/💭 Подсказка:/);
-            if (hintMatch) {
-                const hintIndex = hintMatch.index;
-                // Всё после "💭 Подсказка:"
-                const afterHint = text.substring(hintIndex).replace(/💭 Подсказка:\s*/, '').trim();
+            if (card.additionalQuestion) {
+                // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
+                const text = card.additionalQuestion;
                 
-                // Разделяем по двойным переносам строк
-                const parts = afterHint.split(/\n\n+/);
-                
-                // Последняя часть - это уточняющий вопрос
-                const clarifyingQuestion = parts[parts.length - 1].trim();
-                
-                // Всё до последней части - это подсказка с цитатой
-                const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
-                
-                // Извлекаем цитату с автором (формат: «Цитата» — Автор)
-                const quoteMatch = hintWithQuote.match(/«([^»]*)»\s*—\s*(.+?)(?:\n|$)/);
-                let quoteText = '';
-                let quoteAuthor = '';
-                
-                if (quoteMatch) {
-                    quoteText = quoteMatch[1].trim();
-                    quoteAuthor = quoteMatch[2].trim();
-                } else {
-                    // Если формат без автора, извлекаем только цитату
-                    const simpleQuoteMatch = hintWithQuote.match(/«([^»]*)»/);
-                    if (simpleQuoteMatch) {
-                        quoteText = simpleQuoteMatch[1].trim();
-                    }
-                }
-                
-                // Верхняя часть: дополнительный вопрос
-                const mainQuestionBack = document.getElementById('main-question-back');
-                if (mainQuestionBack) {
-                    mainQuestionBack.textContent = clarifyingQuestion;
-                    mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты
-                }
-                
-                // Нижняя часть: цитата с автором
-                const additionalQuestionBack = document.getElementById('additional-question-back');
-                if (additionalQuestionBack) {
-                    if (quoteText) {
-                        let fullQuote = '«' + quoteText + '»';
-                        if (quoteAuthor) {
-                            fullQuote += '\n— ' + quoteAuthor;
-                        }
-                        additionalQuestionBack.textContent = fullQuote;
-                        additionalQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
+                // Ищем подсказку
+                const hintMatch = text.match(/💭 Подсказка:/);
+                if (hintMatch) {
+                    const hintIndex = hintMatch.index;
+                    // Всё после "💭 Подсказка:"
+                    const afterHint = text.substring(hintIndex).replace(/💭 Подсказка:\s*/, '').trim();
+                    
+                    // Разделяем по двойным переносам строк
+                    const parts = afterHint.split(/\n\n+/);
+                    
+                    // Последняя часть - это уточняющий вопрос
+                    const clarifyingQuestion = parts[parts.length - 1].trim();
+                    
+                    // Всё до последней части - это подсказка с цитатой
+                    const hintWithQuote = parts.slice(0, -1).join('\n\n').trim();
+                    
+                    // Извлекаем цитату с автором (формат: «Цитата» — Автор)
+                    const quoteMatch = hintWithQuote.match(/«([^»]*)»\s*—\s*(.+?)(?:\n|$)/);
+                    let quoteText = '';
+                    let quoteAuthor = '';
+                    
+                    if (quoteMatch) {
+                        quoteText = quoteMatch[1].trim();
+                        quoteAuthor = quoteMatch[2].trim();
                     } else {
-                        additionalQuestionBack.textContent = '';
-                        additionalQuestionBack.classList.remove('quote-text');
+                        // Если формат без автора, извлекаем только цитату
+                        const simpleQuoteMatch = hintWithQuote.match(/«([^»]*)»/);
+                        if (simpleQuoteMatch) {
+                            quoteText = simpleQuoteMatch[1].trim();
+                        }
+                    }
+                    
+                    // Верхняя часть: дополнительный вопрос
+                    const mainQuestionBack = document.getElementById('main-question-back');
+                    if (mainQuestionBack) {
+                        mainQuestionBack.textContent = clarifyingQuestion;
+                        mainQuestionBack.classList.remove('quote-text'); // Убираем класс цитаты
+                    }
+                    
+                    // Нижняя часть: цитата с автором
+                    const additionalQuestionBack = document.getElementById('additional-question-back');
+                    if (additionalQuestionBack) {
+                        if (quoteText) {
+                            let fullQuote = '«' + quoteText + '»';
+                            if (quoteAuthor) {
+                                fullQuote += '\n— ' + quoteAuthor;
+                            }
+                            additionalQuestionBack.textContent = fullQuote;
+                            additionalQuestionBack.classList.add('quote-text'); // Добавляем класс для стилизации цитаты
+                        } else {
+                            additionalQuestionBack.textContent = '';
+                            additionalQuestionBack.classList.remove('quote-text');
+                        }
+                    }
+                } else {
+                    // Если формат не найден, показываем как обычно
+                    if (cardBackSplit) cardBackSplit.style.display = 'none';
+                    if (cardBackSimple) cardBackSimple.style.display = 'block';
+                    const additionalQuestionEl = document.getElementById('additional-question');
+                    if (additionalQuestionEl) {
+                        additionalQuestionEl.textContent = card.additionalQuestion;
                     }
                 }
             } else {
-                // Если формат не найден, показываем как обычно
                 if (cardBackSplit) cardBackSplit.style.display = 'none';
                 if (cardBackSimple) cardBackSimple.style.display = 'block';
                 const additionalQuestionEl = document.getElementById('additional-question');
                 if (additionalQuestionEl) {
-                    additionalQuestionEl.textContent = card.additionalQuestion;
+                    additionalQuestionEl.textContent = '';
                 }
             }
-        } else {
-            if (cardBackSplit) cardBackSplit.style.display = 'none';
-            if (cardBackSimple) cardBackSimple.style.display = 'block';
-            const additionalQuestionEl = document.getElementById('additional-question');
-            if (additionalQuestionEl) {
-                additionalQuestionEl.textContent = '';
-            }
-        }
         } else {
             // Для остальных колод - новая структура с двумя вопросами
             if (eternityHintBlock) eternityHintBlock.style.display = 'none';
