@@ -200,8 +200,8 @@ function updateCardViewer() {
             cardBackSplit.classList.add('special-deck-back'); // Добавляем класс для специальных стилей
         }
         if (cardBackSimple) cardBackSimple.style.display = 'none';
-        alternativesBlock.style.display = 'none';
-        eternityHintBlock.style.display = 'none';
+        if (alternativesBlock) alternativesBlock.style.display = 'none';
+        if (eternityHintBlock) eternityHintBlock.style.display = 'none';
         
         if (card.additionalQuestion) {
             // Формат: "💭 Подсказка: ...\n\n«Цитата»\n\nУточняющий вопрос"
@@ -320,6 +320,7 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
+    } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
