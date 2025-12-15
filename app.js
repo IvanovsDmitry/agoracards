@@ -185,7 +185,7 @@ function updateCardViewer() {
     if (isIntroCard) {
         // Для вводных карт только обновляем кнопки и цвет, остальное пропускаем
     } else {
-        // Специальная обработка для колоды "Вопросы вечности"
+        // Специальная обработка для колоды "Вопросы вечности" и "Атака титанов"
         const eternityHintBlock = document.getElementById('eternity-hint-block');
         const alternativesBlock = document.getElementById('alternatives-block');
         
@@ -279,15 +279,12 @@ function updateCardViewer() {
                 }
             }
         } else {
-            // Для остальных колод - новая структура с двумя вопросами
+            // Для остальных колод (включая "Компания людей" и "Маленькие люди") - структура как в коммите 8776eb5
             if (eternityHintBlock) eternityHintBlock.style.display = 'none';
             const quizAnswer = document.getElementById('quiz-answer');
             if (quizAnswer) quizAnswer.style.display = 'none';
             
             // Показываем новую структуру (две части)
-            const cardBackSplit = document.getElementById('card-back-split');
-            const cardBackSimple = document.getElementById('card-back-simple');
-            
             if (cardBackSplit && cardBackSimple) {
                 cardBackSplit.style.display = 'flex';
                 cardBackSplit.classList.remove('special-deck-back'); // Убираем класс для специальных колод
@@ -317,7 +314,7 @@ function updateCardViewer() {
             const alternativesDivider = document.getElementById('alternatives-divider');
             if (alternativesText && alternativesDivider) {
                 if (alternativesBlock) alternativesBlock.style.display = 'none';
-                alternativesDivider.style.display = 'none';
+                if (alternativesDivider) alternativesDivider.style.display = 'none';
             }
         }
     } // Конец условия !isIntroCard - обработка других колод
