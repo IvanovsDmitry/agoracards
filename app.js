@@ -29,7 +29,7 @@ function initTelegramWebApp() {
 }
 
 // Очистка кэша при обновлении версии
-const APP_VERSION = '2.1';
+const APP_VERSION = '2.0';
 const VERSION_KEY = 'app_version';
 
 function clearCacheIfNeeded() {
@@ -165,12 +165,7 @@ function updateCardViewer() {
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
     document.getElementById('main-question').textContent = card.mainQuestion;
-    // Для колоды "Большая семья" не показываем дополнительный вопрос
-    if (currentDeck.name === 'Большая семья') {
-        document.getElementById('additional-question').textContent = '';
-    } else {
-        document.getElementById('additional-question').textContent = card.additionalQuestion || '';
-    }
+    document.getElementById('additional-question').textContent = card.additionalQuestion;
     
     // Отобразить блок "или то, или то", если есть
     const alternativesBlock = document.getElementById('alternatives-block');
