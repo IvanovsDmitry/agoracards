@@ -347,20 +347,21 @@ body {
 
 /* Стили для вводных карт колоды "Большая семья" */
 .card-front.intro-card {
-    padding: 40px 32px;
-    align-items: flex-start;
-    justify-content: flex-start;
+    padding: 0 32px;
+    align-items: center;
+    justify-content: center;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    display: flex;
 }
 
 .card-front.intro-card .card-text {
-    font-size: 18px;
+    font-size: 11px;
     font-weight: 400;
-    line-height: 1.75;
+    line-height: 1.6;
     text-align: left;
     width: 100%;
-    margin-bottom: 0;
+    margin: auto 0;
     white-space: pre-wrap;
     word-wrap: break-word;
     color: var(--ink);
@@ -370,45 +371,45 @@ body {
 /* Адаптивные стили для вводных карт */
 @media (max-width: 480px) {
     .card-front.intro-card {
-        padding: 32px 24px;
+        padding: 0 24px;
     }
     
     .card-front.intro-card .card-text {
-        font-size: 16px;
-        line-height: 1.65;
+        font-size: 10px;
+        line-height: 1.55;
     }
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
     .card-front.intro-card {
-        padding: 36px 28px;
+        padding: 0 28px;
     }
     
     .card-front.intro-card .card-text {
-        font-size: 17px;
-        line-height: 1.7;
+        font-size: 10.5px;
+        line-height: 1.6;
     }
 }
 
 @media (min-width: 768px) {
     .card-front.intro-card {
-        padding: 48px 40px;
+        padding: 0 40px;
     }
     
     .card-front.intro-card .card-text {
-        font-size: 20px;
-        line-height: 1.8;
+        font-size: 12px;
+        line-height: 1.65;
     }
 }
 
 @media (min-width: 1024px) {
     .card-front.intro-card {
-        padding: 52px 44px;
+        padding: 0 44px;
     }
     
     .card-front.intro-card .card-text {
-        font-size: 21px;
-        line-height: 1.85;
+        font-size: 13px;
+        line-height: 1.7;
     }
 }
 
