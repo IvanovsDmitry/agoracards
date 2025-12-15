@@ -32,7 +32,7 @@ function getDeckFlipType(deckName) {
 }
 
 // Версия приложения для управления кэшем
-const APP_VERSION = '28';
+const APP_VERSION = '29';
 
 let deckManager;
 let currentDeck = null;
