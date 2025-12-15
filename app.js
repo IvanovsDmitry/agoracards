@@ -280,10 +280,6 @@ function setupSwipeHandlers() {
             hasMoved = false;
             return;
         }
-        // Не переворачиваем карту для колоды "Большая семья"
-        if (currentDeck && currentDeck.name === 'Большая семья') {
-            return;
-        }
         flipCard();
     });
     
