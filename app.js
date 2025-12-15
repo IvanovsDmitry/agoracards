@@ -310,12 +310,15 @@ function updateCardViewer() {
     flipCard.classList.remove('flipped');
     isCardFlipped = false;
     
-    // Скрыть кнопку переворота для колод "36 вопросов для незнакомцев" и "Большая семья"
+    // Скрыть кнопку "Разговорить глубже" для колод "36 вопросов для незнакомцев" и "Большая семья"
+    // Кнопка "Пусть судьба выберет" остается видимой для всех колод
     const randomButton = document.getElementById('random-button');
     const flipButton = document.getElementById('flip-button');
     if (currentDeck.name === 'Большая семья' || currentDeck.name === '36 вопросов для незнакомцев') {
+        // Скрываем только кнопку "Разговорить глубже" (переворот карты)
         if (randomButton) randomButton.style.display = 'none';
-        if (flipButton) flipButton.style.display = 'none';
+        // Кнопка "Пусть судьба выберет" остается видимой
+        if (flipButton) flipButton.style.display = 'block';
     } else {
         if (randomButton) randomButton.style.display = 'block';
         if (flipButton) flipButton.style.display = 'block';
