@@ -161,8 +161,30 @@ function updateCardViewer() {
     document.getElementById('card-counter').textContent = 
         `Карта ${currentCardIndex + 1} из ${currentDeck.cards.length}`;
     
-    document.getElementById('main-question').textContent = card.mainQuestion;
+    // Специальная обработка для вводных карт колоды "Большая семья"
+    const cardFront = document.getElementById('card-front');
+    const mainQuestionEl = document.getElementById('main-question');
+    const isIntroCard = currentDeck.name === 'Большая семья' && card.mainQuestion && card.mainQuestion.startsWith('INTRO_CARD_');
     
+    if (isIntroCard) {
+        // Для вводных карт показываем только текст из additionalQuestion
+        mainQuestionEl.textContent = card.additionalQuestion || '';
+        cardFront.classList.add('intro-card');
+        // Скрываем все блоки обратной стороны
+        const cardBackSplit = document.getElementById('card-back-split');
+        const cardBackSimple = document.getElementById('card-back-simple');
+        if (cardBackSplit) cardBackSplit.style.display = 'none';
+        if (cardBackSimple) cardBackSimple.style.display = 'none';
+    } else {
+        // Обычная карта
+        mainQuestionEl.textContent = card.mainQuestion;
+        cardFront.classList.remove('intro-card');
+    }
+    
+    // Для вводных карт пропускаем обработку других колод
+    if (isIntroCard) {
+        // Для вводных карт только обновляем кнопки и цвет, остальное пропускаем
+    } else {
     // Специальная обработка для колоды "Вопросы вечности"
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
@@ -298,6 +320,7 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
+    } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
@@ -483,6 +506,10 @@ function setupSwipeHandlers() {
         // Если был свайп, не переворачиваем
         if (hasMoved) {
             hasMoved = false;
+            return;
+        }
+        // Не переворачиваем карту для колоды "Большая семья"
+        if (currentDeck && currentDeck.name === 'Большая семья') {
             return;
         }
         flipCard();
