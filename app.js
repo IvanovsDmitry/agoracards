@@ -175,8 +175,6 @@ function updateCardViewer() {
         const cardBackSimple = document.getElementById('card-back-simple');
         if (cardBackSplit) cardBackSplit.style.display = 'none';
         if (cardBackSimple) cardBackSimple.style.display = 'none';
-        // Пропускаем остальную обработку для вводных карт
-        // Обновляем только кнопки и цвет
     } else {
         // Обычная карта
         mainQuestionEl.textContent = card.mainQuestion;
@@ -320,7 +318,6 @@ function updateCardViewer() {
             alternativesDivider.style.display = 'none';
         }
     }
-    } // Конец условия !isIntroCard - обработка других колод
     
     // Обновить состояние кнопок
     const prevButton = document.getElementById('prev-button');
