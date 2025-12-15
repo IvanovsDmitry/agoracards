@@ -180,12 +180,8 @@ function updateCardViewer() {
         // Обычная карта - продолжаем обычную обработку
         mainQuestionEl.textContent = card.mainQuestion;
         cardFront.classList.remove('intro-card');
-    }
-    
-    // Для вводных карт пропускаем обработку других колод
-    if (isIntroCard) {
-        // Для вводных карт только обновляем кнопки и цвет, остальное пропускаем
-    } else {
+        
+        // Для обычных карт выполняем обработку других колод
     // Специальная обработка для колоды "Вопросы вечности"
     const eternityHintBlock = document.getElementById('eternity-hint-block');
     const alternativesBlock = document.getElementById('alternatives-block');
