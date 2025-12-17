@@ -32,7 +32,7 @@ function getDeckFlipType(deckName) {
 }
 
 // Версия приложения для управления кэшем
-const APP_VERSION = '31';
+const APP_VERSION = '32';
 
 let deckManager;
 let currentDeck = null;
@@ -47,8 +47,15 @@ function clearCacheIfNeeded() {
     if (savedVersion !== APP_VERSION) {
         // Сохраняем версию перед перезагрузкой
         localStorage.setItem('app_version', APP_VERSION);
-        // Перезагружаем страницу для применения изменений
-        window.location.reload();
+        
+        // Для Telegram WebApp используем более агрессивную очистку кэша
+        if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+            // Принудительная перезагрузка с очисткой кэша для Telegram
+            window.location.href = window.location.href.split('?')[0] + '?v=' + APP_VERSION + '&_=' + Date.now();
+        } else {
+            // Обычная перезагрузка с очисткой кэша
+            window.location.reload(true);
+        }
         return;
     }
 }
