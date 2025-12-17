@@ -32,7 +32,7 @@ function getDeckFlipType(deckName) {
 }
 
 // Версия приложения для управления кэшем
-const APP_VERSION = '32';
+const APP_VERSION = '33';
 
 let deckManager;
 let currentDeck = null;
@@ -45,15 +45,38 @@ let currentX = 0;
 function clearCacheIfNeeded() {
     const savedVersion = localStorage.getItem('app_version');
     if (savedVersion !== APP_VERSION) {
-        // Сохраняем версию перед перезагрузкой
-        localStorage.setItem('app_version', APP_VERSION);
-        
-        // Для Telegram WebApp используем более агрессивную очистку кэша
-        if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
-            // Принудительная перезагрузка с очисткой кэша для Telegram
-            window.location.href = window.location.href.split('?')[0] + '?v=' + APP_VERSION + '&_=' + Date.now();
-        } else {
-            // Обычная перезагрузка с очисткой кэша
+        // Агрессивная очистка всех возможных кэшей
+        try {
+            // Очищаем localStorage (кроме версии, которую сохраним)
+            const keysToKeep = ['app_version'];
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && !keysToKeep.includes(key)) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            
+            // Сохраняем новую версию
+            localStorage.setItem('app_version', APP_VERSION);
+            
+            // Очищаем sessionStorage
+            sessionStorage.clear();
+            
+            // Для Telegram WebApp используем принудительную перезагрузку с очисткой кэша
+            if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+                // Полная перезагрузка с очисткой кэша и timestamp
+                const baseUrl = window.location.href.split('?')[0].split('#')[0];
+                const timestamp = Date.now();
+                window.location.href = baseUrl + '?v=' + APP_VERSION + '&_=' + timestamp + '&nocache=' + timestamp;
+            } else {
+                // Принудительная перезагрузка с очисткой кэша
+                window.location.replace(window.location.href.split('?')[0] + '?v=' + APP_VERSION + '&_=' + Date.now());
+            }
+        } catch (e) {
+            console.error('Ошибка очистки кэша:', e);
+            // В случае ошибки просто перезагружаем
             window.location.reload(true);
         }
         return;
