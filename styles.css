@@ -55,10 +55,10 @@ body {
     font-size: 48px;
     margin-bottom: 16px;
     display: inline-block;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--ink) 0%, rgba(26, 26, 46, 0.8) 100%);
-    border-radius: 18px;
-    box-shadow: 0 8px 24px rgba(26, 26, 46, 0.2);
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
     border: none;
 }
 
